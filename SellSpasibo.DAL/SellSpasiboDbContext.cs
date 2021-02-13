@@ -1,10 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿using Microsoft.EntityFrameworkCore;
+using SellSpasibo.DAL.Entities;
 namespace SellSpasibo.DAL
 {
-    class SellSpasiboDbContext
+    public sealed class SellSpasiboDbContext : DbContext
     {
+        public DbSet<Transaction> Transactions { get; set; }
+
+        public SellSpasiboDbContext(DbContextOptions options) : base(options)
+        {
+            Database.EnsureCreated();
+        }
     }
 }

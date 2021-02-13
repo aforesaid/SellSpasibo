@@ -5,9 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="wwwroot\css\" />
     <Folder Include="wwwroot\js\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SellSpasibo.BLL\SellSpasibo.BLL.csproj" />
+    <ProjectReference Include="..\SellSpasibo.DAL\SellSpasibo.DAL.csproj" />
   </ItemGroup>
 
 </Project>
