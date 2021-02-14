@@ -1,0 +1,17 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<div class="PayRub">
+    <form asp-controller="Home" asp-action="GetRub">
+        <input type="tel" pattern="[7][0-9]{10}" name="Number">
+        <p>Ваш номер</p>
+        <input type="datetime-local" name="Date" />
+        <p>Время перевода указанное в истории</p>
+        <input type="number" step="0.01" max="20000" min="20" name="Cost"/>
+        <p>Пересчитанная сумма (смотрите детали ниже)</p>
+        <input type="submit" name="Тык"/>
+    </form>
+</div>
+@{
+    
+}

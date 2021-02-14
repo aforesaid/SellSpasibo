@@ -4,7 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SellSpasibo.BLL.Services;
 using SellSpasibo.DAL;
+using SellSpasibo.Extensions;
+using SellSpasibo.Options;
+
 namespace SellSpasibo
 {
     public class Startup
@@ -12,6 +16,12 @@ namespace SellSpasibo
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            var sberOptions = Configuration.GetSection(SberOptions.Sber).Get<SberOptions>();
+            SberSpasibo.SetValue(sberOptions.AuthToken);
+
+            var tinkoffOptions = Configuration.GetSection(TinkoffOptions.Tinkoff).Get<TinkoffOptions>();
+            Tinkoff.SetValue(tinkoffOptions.SessionId, tinkoffOptions.WuId);
         }
 
         public IConfiguration Configuration { get; }
@@ -22,6 +32,8 @@ namespace SellSpasibo
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+            services.AddBusinessLogicLayerServicesExtensions();
+            services.AddControllersWithViews();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -38,8 +50,6 @@ namespace SellSpasibo
             app.UseStaticFiles();
 
             app.UseRouting();
-
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -14,9 +14,9 @@ namespace SellSpasibo.BLL.Services
         private const string DefaultLinkByPing = "ping?appName=payments&appVersion=2.6.3&origin=web%2Cib5%2Cplatform";
         private const string DefaultLinkByGetInfoByUser = "get_requisites?pointerType=phone&pointerSource=sbp";
 
-        private string _sessionId = null;
-        private string _wuId = null;
-        public void SetValue(string sessionId, string wuId)
+        private static string _sessionId;
+        private static string _wuId;
+        public static void SetValue(string sessionId, string wuId)
         {
             _sessionId = sessionId;
             _wuId      = wuId;
