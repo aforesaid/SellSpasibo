@@ -9,6 +9,7 @@ namespace SellSpasibo.DAL.Entities
         public int Id { get; set; }
         public decimal Cost { get; set; }
         public string TransactionType { get; set; }
+        public  string Content { get; set; }
         public DateTime Time { get; set; }
         public string Hash { get; set; }
     }
