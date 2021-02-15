@@ -7,6 +7,5 @@ namespace SellSpasibo.BLL.Interfaces
         Task<bool> UpdateSession();
         Task<string> GetTransactionHistory();
         Task<string> CreateNewOrder(string cost, string number);
-
     }
 }
