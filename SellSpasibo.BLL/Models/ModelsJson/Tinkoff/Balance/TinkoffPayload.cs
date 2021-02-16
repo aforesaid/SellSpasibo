@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace SellSpasibo.BLL.Models.ModelsJson.Tinkoff.Balance
 {
-    class TinkoffPayload
+    public class TinkoffPayload
     {
         [JsonPropertyName("payload")]
         public List<TinkoffInfoByCard> Cards { get; set; }

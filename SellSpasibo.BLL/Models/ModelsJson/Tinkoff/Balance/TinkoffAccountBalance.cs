@@ -2,7 +2,7 @@
 
 namespace SellSpasibo.BLL.Models.ModelsJson.Tinkoff.Balance
 {
-    class TinkoffAccountBalance
+    public class TinkoffAccountBalance
     {
         [JsonPropertyName("currency")]
         public TinkoffCurrency Currency { get; set; }

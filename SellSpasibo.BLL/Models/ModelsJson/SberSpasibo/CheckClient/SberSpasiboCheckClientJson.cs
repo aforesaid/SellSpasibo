@@ -2,7 +2,7 @@
 
 namespace SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.CheckClient
 {
-    class SberSpasiboCheckClientJson
+    public class SberSpasiboCheckClientJson
     {
         [JsonPropertyName("data")]
         public SberSpasiboDataJson Data { get; set; }

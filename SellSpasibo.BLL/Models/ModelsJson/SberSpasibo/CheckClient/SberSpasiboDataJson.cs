@@ -1,8 +1,12 @@
-﻿namespace SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.CheckClient
+﻿using System.Text.Json.Serialization;
+
+namespace SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.CheckClient
 {
-    class SberSpasiboDataJson
+    public class SberSpasiboDataJson
     {
+        [JsonPropertyName("maxSum")]
         public decimal MaxSum { get; set; }
+        [JsonPropertyName("minSum")]
         public decimal MinSum { get; set; }
     }
 }

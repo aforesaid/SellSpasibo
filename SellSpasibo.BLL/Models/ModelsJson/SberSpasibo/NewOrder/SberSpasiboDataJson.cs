@@ -2,7 +2,7 @@
 
 namespace SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.NewOrder
 {
-    class SberSpasiboDataJson
+    public class SberSpasiboDataJson
     {
         [JsonPropertyName("status")]
         public bool Status { get; set; }

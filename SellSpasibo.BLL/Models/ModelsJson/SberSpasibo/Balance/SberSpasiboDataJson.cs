@@ -2,7 +2,7 @@
 
 namespace SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.Balance
 {
-    class SberSpasiboDataJson
+    public class SberSpasiboDataJson
     {
         [JsonPropertyName("loyaltySystem")]
         public SberSpasiboLoyaltySystemJson LoyaltySystem { get; set; }

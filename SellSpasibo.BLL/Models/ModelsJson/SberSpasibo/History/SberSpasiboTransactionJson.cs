@@ -2,7 +2,7 @@
 
 namespace SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.History
 {
-    class SberSpasiboTransactionJson
+    public class SberSpasiboTransactionJson
     {
         [JsonPropertyName("bonusBalanceChange")]
         public double BonusBalanceChange { get; set; }

@@ -2,7 +2,7 @@
 
 namespace SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.History
 {
-    class SberSpasiboGetHistoryJson
+    public class SberSpasiboGetHistoryJson
     {
         [JsonPropertyName("data")]
         public SberSpasiboDataJson Data { get; set; }
