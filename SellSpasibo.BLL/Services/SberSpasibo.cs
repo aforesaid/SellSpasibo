@@ -59,5 +59,33 @@ namespace SellSpasibo.BLL.Services
             //TODO: добавить проверку на выполнение платежа
             return contentString;
         }
+        public async Task<string> GetBalance()
+        {
+            using var client = new HttpClient();
+            var link = $"{Domain}/personal/me";
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_authToken}");
+            var response = await client.GetAsync(link);
+            if (response.StatusCode != HttpStatusCode.OK)
+                //TODO: добавить логику логгирования ошибки
+                return null;
+            var contentString = await response.Content.ReadAsStringAsync();
+            return contentString;
+        }
+        public async Task<string> CheckClient(string phone)
+        {
+            using var client = new HttpClient();
+            var       link   = $"{Domain}/personal/loyalitySystem/converter/checkToClient";
+            var content =
+                new
+                    StringContent($"{{\"sumToConvert\":1,\"phone\":\"{phone}\",\"converterId\":\"p_2_p\"}}",
+                                  Encoding.UTF8, "application/json");
+            var response = await client.PostAsync(link, content);
+            if (response.StatusCode != HttpStatusCode.OK)
+                //TODO: добавить логику логгирования ошибки
+                return null;
+            var contentString = await response.Content.ReadAsStringAsync();
+            //TODO: добавить проверку на выполнение платежа
+            return contentString;
+        }
     }
 }
