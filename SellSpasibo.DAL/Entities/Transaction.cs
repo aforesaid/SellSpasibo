@@ -12,5 +12,6 @@ namespace SellSpasibo.DAL.Entities
         public  string Content { get; set; }
         public DateTime Time { get; set; }
         public string Hash { get; set; }
+        public bool IsPaid { get; set; }
     }
 }
