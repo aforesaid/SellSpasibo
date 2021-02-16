@@ -1,10 +1,15 @@
-﻿using System.Collections.Generic;
-using SellSpasibo.BLL.Interfaces;
+﻿using SellSpasibo.BLL.Interfaces;
+using SellSpasibo.BLL.Models;
+using SellSpasibo.BLL.Models.ModelsJson.Tinkoff.AnyBanks;
+using SellSpasibo.BLL.Models.ModelsJson.Tinkoff.Balance;
+using SellSpasibo.BLL.Models.ModelsJson.Tinkoff.NewOrder;
+using SellSpasibo.BLL.Models.ModelsJson.Tinkoff.UserByBank;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
-using SellSpasibo.BLL.Models;
 
 namespace SellSpasibo.BLL.Services
 {
@@ -29,7 +34,7 @@ namespace SellSpasibo.BLL.Services
             var       response = await client.GetAsync(link);
             return response.StatusCode == HttpStatusCode.OK;
         }
-        public async Task<string> GetInfoByUser(string number, string bankMemberId)
+        public async Task<TinkoffCheckUserParams> GetInfoByUser(string number, string bankMemberId)
         {
             using var client = new HttpClient();
             var link =
@@ -39,10 +44,9 @@ namespace SellSpasibo.BLL.Services
                 //TODO: добавить логику логгирования ошибки
                 return null;
             var contentString = await response.Content.ReadAsStringAsync();
-            //TODO : добавить перевод в объект из json
-            return contentString;
+            return JsonSerializer.Deserialize<TinkoffCheckUserParams>(contentString);
         }
-        public async Task<string> GetBankMember()
+        public async Task<TinkoffGetBanks> GetBankMember()
         {
             using var client   = new HttpClient();
             var       link     = $"{Domain}/{VersionApi}/sbp_dictionary?sessionid={_sessionId}&wuid={_wuId}";
@@ -51,11 +55,10 @@ namespace SellSpasibo.BLL.Services
                 //TODO: добавить логику логгирования ошибки
                 return null;
             var contentString = await response.Content.ReadAsStringAsync();
-            //TODO : добавить перевод в объект из json
-            return contentString;
+            return JsonSerializer.Deserialize<TinkoffGetBanks>(contentString);
         }
 
-        public async Task<string> CreateNewOrder(Order order)
+        public async Task<TinkoffSendOrderJson> CreateNewOrder(Order order)
         {
             using var client = new HttpClient();
             var       link   = $"{Domain}/{VersionApi}/pay?appName=payments&sessionid={_sessionId}&wuid={_wuId}";
@@ -65,11 +68,10 @@ namespace SellSpasibo.BLL.Services
                 //TODO: добавить логику логгирования ошибки
                 return null;
             var contentString = await response.Content.ReadAsStringAsync();
-            //TODO : добавить перевод в объект из json
-            return contentString;
+            return JsonSerializer.Deserialize<TinkoffSendOrderJson>(contentString);
         }
 
-        public async Task<string> GetBalance()
+        public async Task<TinkoffBalanceOrder> GetBalance()
         {
             using var client         = new HttpClient();
             var       link           = $"{Domain}/{VersionApi}/grouped_requests?_methods=accounts_flat&sessionid={_sessionId}";
@@ -83,8 +85,7 @@ namespace SellSpasibo.BLL.Services
                 //TODO: добавить логику логгирования ошибки
                 return null;
             var contentString = await response.Content.ReadAsStringAsync();
-            //TODO : добавить перевод в объект из json
-            return contentString;
+            return JsonSerializer.Deserialize<TinkoffBalanceOrder>(contentString);
         }
     }
 }

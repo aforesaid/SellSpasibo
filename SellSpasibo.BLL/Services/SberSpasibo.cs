@@ -1,8 +1,13 @@
-﻿using System.Net;
+﻿using SellSpasibo.BLL.Interfaces;
+using SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.Balance;
+using SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.CheckClient;
+using SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.History;
+using SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.NewOrder;
+using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
-using SellSpasibo.BLL.Interfaces;
 
 namespace SellSpasibo.BLL.Services
 {
@@ -30,7 +35,7 @@ namespace SellSpasibo.BLL.Services
             return true;
         }
 
-        public async Task<string> GetTransactionHistory()
+        public async Task<SberSpasiboGetHistoryJson> GetTransactionHistory()
         {
             using var client = new HttpClient();
             var       link   = $"{Domain}/personal/loyalitySystem/transactions?page=1&cnt={DefaultCountTransactionByQuery}";
@@ -40,10 +45,10 @@ namespace SellSpasibo.BLL.Services
                 //TODO: добавить логику логгирования ошибки
                 return null;
             var contentString = await response.Content.ReadAsStringAsync();
-            return contentString;
+            return JsonSerializer.Deserialize<SberSpasiboGetHistoryJson>(contentString);
         }
 
-        public async Task<string> CreateNewOrder(string cost, string number)
+        public async Task<SberSpasiboNewOrderJson> CreateNewOrder(string cost, string number)
         {
             using var client = new HttpClient();
             var       link   = $"{Domain}/personal/loyalitySystem/convert";
@@ -56,10 +61,9 @@ namespace SellSpasibo.BLL.Services
                 //TODO: добавить логику логгирования ошибки
                 return null;
             var contentString = await response.Content.ReadAsStringAsync();
-            //TODO: добавить проверку на выполнение платежа
-            return contentString;
+            return JsonSerializer.Deserialize<SberSpasiboNewOrderJson>(contentString);
         }
-        public async Task<string> GetBalance()
+        public async Task<SberSpasiboGetCurrentBalanceJson> GetBalance()
         {
             using var client = new HttpClient();
             var link = $"{Domain}/personal/me";
@@ -69,9 +73,9 @@ namespace SellSpasibo.BLL.Services
                 //TODO: добавить логику логгирования ошибки
                 return null;
             var contentString = await response.Content.ReadAsStringAsync();
-            return contentString;
+            return JsonSerializer.Deserialize<SberSpasiboGetCurrentBalanceJson>(contentString);
         }
-        public async Task<string> CheckClient(string phone)
+        public async Task<SberSpasiboCheckClientJson> CheckClient(string phone)
         {
             using var client = new HttpClient();
             var       link   = $"{Domain}/personal/loyalitySystem/converter/checkToClient";
@@ -85,7 +89,7 @@ namespace SellSpasibo.BLL.Services
                 return null;
             var contentString = await response.Content.ReadAsStringAsync();
             //TODO: добавить проверку на выполнение платежа
-            return contentString;
+            return JsonSerializer.Deserialize<SberSpasiboCheckClientJson>(contentString);
         }
     }
 }
