@@ -9,5 +9,6 @@ namespace SellSpasibo.BLL.Interfaces
         Task<string> GetInfoByUser(string number, string bankMemberId);
         Task<string> GetBankMember();
         Task<string> CreateNewOrder(Order order);
+        Task<string> GetBalance();
     }
 }

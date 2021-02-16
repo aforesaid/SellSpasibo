@@ -1,4 +1,5 @@
-﻿using SellSpasibo.BLL.Interfaces;
+﻿using System.Collections.Generic;
+using SellSpasibo.BLL.Interfaces;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -60,6 +61,24 @@ namespace SellSpasibo.BLL.Services
             var       link   = $"{Domain}/{VersionApi}/pay?appName=payments&sessionid={_sessionId}&wuid={_wuId}";
             var       requestContent = new StringContent(order.ToString(), Encoding.UTF8, "application/json");
             var       response = await client.PostAsync(link,requestContent);
+            if (response.StatusCode != HttpStatusCode.OK)
+                //TODO: добавить логику логгирования ошибки
+                return null;
+            var contentString = await response.Content.ReadAsStringAsync();
+            //TODO : добавить перевод в объект из json
+            return contentString;
+        }
+
+        public async Task<string> GetBalance()
+        {
+            using var client         = new HttpClient();
+            var       link           = $"{Domain}/{VersionApi}/grouped_requests?_methods=accounts_flat&sessionid={_sessionId}";
+            var content = new Dictionary<string, string>()
+            {
+                ["requestsData"] = @$"[{{""key"":0,""operation"":""accounts_flat"",""params"":{{""wuid"":""{_wuId}""}}}}]"
+            };
+            var       requestContent = new FormUrlEncodedContent(content);
+            var       response       = await client.PostAsync(link, requestContent);
             if (response.StatusCode != HttpStatusCode.OK)
                 //TODO: добавить логику логгирования ошибки
                 return null;
