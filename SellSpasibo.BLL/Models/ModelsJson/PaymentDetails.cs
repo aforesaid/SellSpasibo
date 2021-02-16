@@ -1,11 +1,11 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SellSpasibo.BLL.Models
+namespace SellSpasibo.BLL.Models.ModelsJson
 {
     public class PaymentDetails
     {
-        [JsonPropertyName("pointerType")]
-        public string PointerType { get; set; }
+        [JsonPropertyName("pointerType")] 
+        public string PointerType { get; set; } = "8276";
         [JsonPropertyName("pointer")]
         public string Pointer { get; set; }
         [JsonPropertyName("pointerLinkId")]

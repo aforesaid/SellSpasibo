@@ -17,7 +17,6 @@ namespace SellSpasibo.BLL.Services
         private static int DefaultCountTransactionByQuery { get; } = 500;
 
         private static string _authToken;
-
         public static void SetValue(string authToken)
         {
             _authToken = authToken;

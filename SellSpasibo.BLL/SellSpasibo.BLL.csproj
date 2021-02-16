@@ -8,4 +8,8 @@
     <Folder Include="DTOs\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SellSpasibo.DAL\SellSpasibo.DAL.csproj" />
+  </ItemGroup>
+
 </Project>

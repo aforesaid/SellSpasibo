@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace SellSpasibo.BLL.Models
+namespace SellSpasibo.BLL.Models.ModelsJson
 {
     public class Order
     {

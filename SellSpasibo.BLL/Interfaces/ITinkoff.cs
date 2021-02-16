@@ -4,6 +4,7 @@ using SellSpasibo.BLL.Models.ModelsJson.Tinkoff.Balance;
 using SellSpasibo.BLL.Models.ModelsJson.Tinkoff.NewOrder;
 using SellSpasibo.BLL.Models.ModelsJson.Tinkoff.UserByBank;
 using System.Threading.Tasks;
+using SellSpasibo.BLL.Models.ModelsJson;
 
 namespace SellSpasibo.BLL.Interfaces
 {

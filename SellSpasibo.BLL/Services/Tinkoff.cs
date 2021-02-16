@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using SellSpasibo.BLL.Models.ModelsJson;
 
 namespace SellSpasibo.BLL.Services
 {
@@ -22,10 +23,13 @@ namespace SellSpasibo.BLL.Services
 
         private static string _sessionId;
         private static string _wuId;
-        public static void SetValue(string sessionId, string wuId)
+        private static string _account;
+        public static void SetValue(string sessionId, string wuId,
+            string account)
         {
             _sessionId = sessionId;
             _wuId      = wuId;
+            _account   = account;
         }
         public async Task<bool> UpdateSession()
         {
@@ -60,10 +64,16 @@ namespace SellSpasibo.BLL.Services
 
         public async Task<TinkoffSendOrderJson> CreateNewOrder(Order order)
         {
-            using var client = new HttpClient();
-            var       link   = $"{Domain}/{VersionApi}/pay?appName=payments&sessionid={_sessionId}&wuid={_wuId}";
-            var       requestContent = new StringContent(order.ToString(), Encoding.UTF8, "application/json");
-            var       response = await client.PostAsync(link,requestContent);
+            order.Account = _account;
+
+            using var client         = new HttpClient();
+            var       link           = $"{Domain}/{VersionApi}/pay?appName=payments&sessionid={_sessionId}&wuid={_wuId}";
+            var content = new Dictionary<string, string>()
+            {
+                ["payParameters"] = order.ToString()
+            };
+            var requestContent = new FormUrlEncodedContent(content);
+            var response       = await client.PostAsync(link, requestContent);
             if (response.StatusCode != HttpStatusCode.OK)
                 //TODO: добавить логику логгирования ошибки
                 return null;
