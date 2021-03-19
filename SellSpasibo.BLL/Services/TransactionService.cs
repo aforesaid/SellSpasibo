@@ -21,24 +21,22 @@ namespace SellSpasibo.BLL.Services
 
         public async Task<TinkoffSendOrderJson> CreateNewSberSpasiboOrder(Transaction transaction)
         {
-            if (await IsValid(transaction))
+            if (!await IsValid(transaction)) return null;
+            var bank = await GetInfoByBank(transaction.BankName);
+            if (bank == null)
+                return null;
+            var paymentDetails = new PaymentDetails()
             {
-                var bank = await GetInfoByBank(transaction.BankName);
-                if (bank == null)
-                    return null;
-                var paymentDetails = new PaymentDetails()
-                {
-                    Pointer = $"+{transaction.Number}",
-                    MaskedFIO = bank.MemberId
-                };
-                var order = new Order()
-                {
-                    Money = Math.Truncate(transaction.Cost * 0.7m),
-                    Details = paymentDetails
-                };
-                var tinkoffService = new Tinkoff();
-                var response = await tinkoffService.CreateNewOrder(order);
-            }
+                Pointer = $"+{transaction.Number}",
+                MaskedFIO = bank.MemberId
+            };
+            var order = new Order()
+            {
+                Money = Math.Truncate(transaction.Cost * 0.7m),
+                Details = paymentDetails
+            };
+            var tinkoffService = new Tinkoff();
+            var response = await tinkoffService.CreateNewOrder(order);
             return null;
         }
 

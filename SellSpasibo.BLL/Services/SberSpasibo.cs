@@ -8,29 +8,37 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using SellSpasibo.BLL.Models.ModelsJson.SberSpasibo;
 
 namespace SellSpasibo.BLL.Services
 {
     public class SberSpasibo : ISberSpasibo
     {
-        private const string Domain = "https://www.tinkoff.ru/api/online";
+        private const string Domain = "https://new.spasibosberbank.ru/api/online";
         private static int DefaultCountTransactionByQuery { get; } = 500;
 
         private static string _authToken;
-        public static void SetValue(string authToken)
+        private static string _refreshToken;
+        public static void SetValue(string authToken,
+            string refreshToken)
         {
             _authToken = authToken;
+            _refreshToken = refreshToken;
         }
 
         public async Task<bool> UpdateSession()
         {
             using var client   = new HttpClient();
-            var       link     = $"{Domain}/auth/refresh";
-            var       response = await client.GetAsync(link);
-            //TODO: добавить обновление токена
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_authToken}");
+            var link     = $"{Domain}/auth/refresh";
+            var content = new StringContent($"{{\"refreshToken\":\"{_refreshToken}\"}}",Encoding.UTF8, "application/json");
+            var       response = await client.PostAsync(link,content);
             if (response.StatusCode != HttpStatusCode.OK)
                 //TODO: добавить логику логгирования ошибки
                 return false;
+            var stringContent = await response.Content.ReadAsStringAsync();
+            var info = JsonSerializer.Deserialize<DataUpdateToken>(stringContent);
+            (_refreshToken, _authToken) = (info.Info.RefreshToken, info.Info.Token);
             return true;
         }
 

@@ -4,5 +4,6 @@
     {
         public const string Sber = "Sber";
         public string AuthToken { get; set; }
+        public string RefreshToken { get; set; }
     }
 }
