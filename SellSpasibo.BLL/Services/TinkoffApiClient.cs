@@ -7,6 +7,7 @@ using SellSpasibo.BLL.Models.ModelsJson.Tinkoff.UserByBank;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -32,7 +33,7 @@ namespace SellSpasibo.BLL.Services
             SetTokens(options.Value.SessionId, options.Value.WuId, options.Value.Account);
         }
 
-        public void SetTokens(string sessionId, string wuId,
+        private void SetTokens(string sessionId, string wuId,
             string account)
         {
             _sessionId = sessionId;
@@ -61,6 +62,7 @@ namespace SellSpasibo.BLL.Services
 
         public async Task<TinkoffSendOrderJson> CreateNewOrder(Order order)
         {
+            //TODO: исправить сериализацию ответа, не сериализуется
             order.Account = _account;
             
             var link = UrlsConstants.TinkoffConst.CreateNewOrderLink(_sessionId, _wuId);
@@ -84,7 +86,11 @@ namespace SellSpasibo.BLL.Services
         {
             try
             {
-                var contentString = JsonSerializer.Serialize(request);
+                var contentString = JsonSerializer.Serialize(request, new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                });
                 var contentDictionary = new Dictionary<string, string>()
                 {
                     [columnName] = contentString

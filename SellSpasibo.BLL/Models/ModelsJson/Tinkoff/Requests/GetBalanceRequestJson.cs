@@ -7,7 +7,7 @@
             Params = new GetBalanceParamsJson(wuid);
         }
         public int Key { get; } = 0;
-        public string Operation { get; } = "accounts_flag";
+        public string Operation { get; } = "accounts_flat";
         public GetBalanceParamsJson Params { get; }
 
         public GetBalanceRequestJson[] ToRequest()

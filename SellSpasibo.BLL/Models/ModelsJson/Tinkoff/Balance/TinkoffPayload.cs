@@ -10,4 +10,10 @@ namespace SellSpasibo.BLL.Models.ModelsJson.Tinkoff.Balance
         [JsonPropertyName("resultCode")]
         public string ResultCode { get; set; }
     }
+
+    public class TinkoffPayloadInfo
+    {
+        [JsonPropertyName("0")]
+        public TinkoffPayload Payload { get; set; }
+    }
 }

@@ -5,7 +5,7 @@ namespace SellSpasibo.BLL.Models.ModelsJson.Tinkoff.AnyBanks
 {
     public class TinkoffGetBanks
     {
-        [JsonPropertyName("Payload")]
+        [JsonPropertyName("payload")]
         public List<TinkoffBankJson> Payload { get; set; }
         [JsonPropertyName("resultCode")]
         public string ResultCode { get; set; }

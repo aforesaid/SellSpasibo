@@ -5,4 +5,14 @@
       <UserSecretsId>44295977-146d-4ea5-a926-5dc9a09a8691</UserSecretsId>
   </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\SellSpasibo.BLL\SellSpasibo.BLL.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
+      <PackageReference Include="Moq" Version="4.16.1" />
+      <PackageReference Include="xunit" Version="2.4.1" />
+    </ItemGroup>
+
 </Project>

@@ -7,6 +7,6 @@ namespace SellSpasibo.BLL.Models.ModelsJson.Tinkoff.Balance
         [JsonPropertyName("currency")]
         public TinkoffCurrency Currency { get; set; }
         [JsonPropertyName("value")]
-        public decimal Value { get; set; }
+        public double Value { get; set; }
     }
 }

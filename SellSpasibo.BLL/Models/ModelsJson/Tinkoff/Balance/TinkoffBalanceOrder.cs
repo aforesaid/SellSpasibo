@@ -8,6 +8,6 @@ namespace SellSpasibo.BLL.Models.ModelsJson.Tinkoff.Balance
         [JsonPropertyName("trackingId")]
         public string TrackingId { get; set; }
         [JsonPropertyName("payload")]
-        public List<TinkoffPayload> Payloads { get; set; }
+        public TinkoffPayloadInfo Payload { get; set; }
     }
 }
