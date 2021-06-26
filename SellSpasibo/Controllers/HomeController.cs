@@ -13,10 +13,7 @@ namespace SellSpasibo.Controllers
         [HttpPost]
         public IActionResult GetRub(OrderRubViewModel model)
         {
-            if (!ModelState.IsValid)
-                return View();
-            var i = 1;
-            return View();
+            return Ok();
         }
     }
 }

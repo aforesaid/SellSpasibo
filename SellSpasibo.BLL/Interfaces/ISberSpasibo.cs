@@ -10,7 +10,7 @@ namespace SellSpasibo.BLL.Interfaces
     {
         Task<bool> UpdateSession();
         Task<SberSpasiboGetHistoryJson> GetTransactionHistory();
-        Task<SberSpasiboNewOrderJson> CreateNewOrder(string cost, string number);
+        Task<SberSpasiboNewOrderJson> CreateNewOrder(double cost, string number);
         Task<SberSpasiboCheckClientJson> CheckClient(string number);
         Task<SberSpasiboGetCurrentBalanceJson> GetBalance();
     }
