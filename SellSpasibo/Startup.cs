@@ -23,6 +23,7 @@ namespace SellSpasibo
         {
             services.AddDbContext<SellSpasiboDbContext>(options =>
             {
+                //TODO: реализовать работу с бд посредством PostgreSQL
                 options.UseInMemoryDatabase("db");
             });
             
@@ -34,6 +35,7 @@ namespace SellSpasibo
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //TODO: добавить RateLimit
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
