@@ -1,4 +1,4 @@
-﻿namespace SellSpasibo.BLL.Interfaces
+﻿namespace SellSpasibo.BLL
 {
     public static class UrlsConstants
     {

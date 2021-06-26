@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SellSpasibo.BLL.Options;
 using SellSpasibo.DAL;
 using SellSpasibo.Extensions;
-using SellSpasibo.Options;
 
 namespace SellSpasibo
 {

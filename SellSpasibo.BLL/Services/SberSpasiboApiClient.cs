@@ -9,8 +9,10 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using SellSpasibo.BLL.Models.ModelsJson.SberSpasibo;
 using SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.Requests;
+using SellSpasibo.BLL.Options;
 
 namespace SellSpasibo.BLL.Services
 {
@@ -22,9 +24,11 @@ namespace SellSpasibo.BLL.Services
 
         private readonly ILogger<SberSpasiboApiClient> _logger;
 
-        public SberSpasiboApiClient(ILogger<SberSpasiboApiClient> logger)
+        public SberSpasiboApiClient(ILogger<SberSpasiboApiClient> logger,
+            IOptions<SberOptions> options)
         {
             _logger = logger;
+            SetTokens(options.Value.AuthToken, options.Value.RefreshToken);
         }
 
         public void SetTokens(string authToken,

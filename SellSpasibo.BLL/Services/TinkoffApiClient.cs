@@ -10,8 +10,10 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using SellSpasibo.BLL.Models.ModelsJson;
 using SellSpasibo.BLL.Models.ModelsJson.Tinkoff.Requests;
+using SellSpasibo.BLL.Options;
 
 namespace SellSpasibo.BLL.Services
 {
@@ -23,9 +25,11 @@ namespace SellSpasibo.BLL.Services
         private readonly HttpClient _httpClient = new HttpClient();
         private readonly ILogger<TinkoffApiClient> _logger;
 
-        public TinkoffApiClient(ILogger<TinkoffApiClient> logger)
+        public TinkoffApiClient(ILogger<TinkoffApiClient> logger,
+            IOptions<TinkoffOptions> options)
         {
             _logger = logger;
+            SetTokens(options.Value.SessionId, options.Value.WuId, options.Value.Account);
         }
 
         public void SetTokens(string sessionId, string wuId,

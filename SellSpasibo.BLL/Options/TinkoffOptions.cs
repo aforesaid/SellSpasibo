@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace SellSpasibo.Options
+﻿namespace SellSpasibo.BLL.Options
 {
     public class TinkoffOptions
     {

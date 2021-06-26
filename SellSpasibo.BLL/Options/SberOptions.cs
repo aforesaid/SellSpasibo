@@ -1,4 +1,4 @@
-﻿namespace SellSpasibo.Options
+﻿namespace SellSpasibo.BLL.Options
 {
     public class SberOptions
     {
