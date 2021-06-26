@@ -8,7 +8,7 @@ namespace SellSpasibo.Extensions
         public static void AddBusinessLogicLayerServicesExtensions(this IServiceCollection services)
         {
             services.AddScoped<ITinkoff,Tinkoff>();
-            services.AddScoped<ISberSpasibo, SberSpasibo>();
+            services.AddScoped<ISberSpasibo, SberSpasiboApiClient>();
             //TODO: добавить сервис для взаимодействия с бд/юзерской инфой
         }
     }

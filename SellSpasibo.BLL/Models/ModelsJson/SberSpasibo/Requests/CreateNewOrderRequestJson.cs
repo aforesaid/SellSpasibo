@@ -1,8 +1,4 @@
-﻿using System.Net.Http;
-using System.Text;
-using System.Text.Json;
-
-namespace SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.Requests
+﻿namespace SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.Requests
 {
     public class CreateNewOrderRequestJson
     {
@@ -18,9 +14,5 @@ namespace SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.Requests
         public string CardId { get; } = @"\";
         public string Number { get; } = @"\";
         
-        public StringContent ToRequest()
-        {
-            return new StringContent(JsonSerializer.Serialize(this), Encoding.UTF8, "application/json");
-        }
     }
 }
