@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SellSpasibo.BLL.Models.ModelsJson;
@@ -35,8 +34,8 @@ namespace SellSpasibo.BLL.Services
                 Money = Math.Truncate(transaction.Cost * 0.7m),
                 Details = paymentDetails
             };
-            var tinkoffService = new TinkoffApiClient();
-            var response = await tinkoffService.CreateNewOrder(order);
+            // var tinkoffService = new TinkoffApiClient();
+            // var response = await tinkoffService.CreateNewOrder(order);
             return null;
         }
 

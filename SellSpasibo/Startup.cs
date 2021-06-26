@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SellSpasibo.BLL.Services;
 using SellSpasibo.DAL;
 using SellSpasibo.Extensions;
 using SellSpasibo.Options;
@@ -16,12 +15,6 @@ namespace SellSpasibo
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-
-            var sberOptions = Configuration.GetSection(SberOptions.Sber).Get<SberOptions>();
-            SberSpasiboApiClient.SetTokens(sberOptions.AuthToken, sberOptions.RefreshToken);
-
-            var tinkoffOptions = Configuration.GetSection(TinkoffOptions.Tinkoff).Get<TinkoffOptions>();
-            TinkoffApiClient.SetTokens(tinkoffOptions.SessionId, tinkoffOptions.WuId, tinkoffOptions.Account);
         }
 
         public IConfiguration Configuration { get; }
@@ -32,6 +25,10 @@ namespace SellSpasibo
             {
                 options.UseInMemoryDatabase("db");
             });
+            
+            services.Configure<SberOptions>(Configuration.GetSection(SberOptions.Sber));
+            services.Configure<TinkoffOptions>(Configuration.GetSection(TinkoffOptions.Tinkoff));
+                
             services.AddBusinessLogicLayerServicesExtensions();
             services.AddControllersWithViews();
         }
