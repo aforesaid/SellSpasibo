@@ -30,10 +30,16 @@
                 return $"{Domain}/{VersionApi}/{DefaultLinkByPing}&sessionid={sessionId}&wuid={wuId}";
             }
 
-            public static string GetInfoByUserLink(string number, string bankMemberId, string sessionId, string wuId)
+            public static string GetInfoByUserInternalLink(string number, string sessionId, string wuId)
             {
-                return $"{Domain}/{VersionApi}/{DefaultLinkByGetInfoByUser}&pointer=%2B{number}&bankMemberId={bankMemberId}&sessionid={sessionId}&wuid={wuId}";
+                return $"{Domain}/{VersionApi}/{DefaultLinkByGetInfoByUser}&pointer=%2B{number}&pointerSource=internal&pointerType=phone&sessionid={sessionId}&wuid={wuId}";
             }
+            //Поддерживаются пока только банк тинькофф
+            public static string GetInfoByUserExternalLink(string number, string sessionId, string wuId)
+            {
+                return $"{Domain}/{VersionApi}/{DefaultLinkByGetInfoByUser}&pointer=%2B{number}&pointerSource=external&pointerType=phone&sessionid={sessionId}&wuid={wuId}";
+            }
+
 
             public static string GetBankMemberLink(string sessionId, string wuId)
             {

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using SellSpasibo.BLL.Interfaces;
 using SellSpasibo.BLL.Models.ModelsJson;
+using SellSpasibo.BLL.Models.ModelsJson.Tinkoff.UserByBank;
 using SellSpasibo.BLL.Options;
 using SellSpasibo.BLL.Services;
 using Xunit;
@@ -35,11 +37,9 @@ namespace SellSpasibo.UnitTests.Services
         [Fact]
         public async Task GetInfoByUser_Expected_UserParams()
         {
-            var number = "+777777777";
-            string bankMemberId = null;
-            var actual = await _tinkoffService.GetInfoByUser(number, bankMemberId);
+            var number = "";
+            var actual = await _tinkoffService.GetInfoByUser(number);
             Assert.NotNull(actual);
-            Assert.NotNull(actual.Payload);
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace SellSpasibo.UnitTests.Services
             };
             var order = new Order()
             {
-                Money = Math.Truncate(10m),
+                Money = Math.Truncate(0.01m),
                 Details = paymentDetails
             };     
             var actual = await _tinkoffService.CreateNewOrder(order);
@@ -76,6 +76,41 @@ namespace SellSpasibo.UnitTests.Services
             Assert.NotNull(actual);
             Assert.NotNull(actual.Payload);
             Assert.NotNull(actual.Payload.Payload);
+        }
+
+        [Fact]
+        public async Task TestCountRequestLimit_Expected_No()
+        {
+            var number = "";
+            string bankMemberId = null;
+            
+           
+
+            TinkoffPayloadJson info;
+            var counter = 0;
+            do
+            { 
+                info = await _tinkoffService.GetInfoByUser(number);
+                if (info != null)
+                {
+                    counter++;
+                    var paymentDetails = new PaymentDetails()
+                    {
+                        Pointer = number,
+                        MaskedFIO = info.DisplayInfo.First(x => x.Name == "value").Value,
+                        PointerLinkId = info.PointerLinkId
+                    };
+                    var order = new Order()
+                    {
+                        Money = Math.Truncate(0.01m),
+                        Details = paymentDetails
+                    };
+                    await _tinkoffService.CreateNewOrder(order);
+                    await Task.Delay(1000);
+                }
+
+            } while (info != null);
+            Assert.NotEqual(0, counter);
         }
     }
 }

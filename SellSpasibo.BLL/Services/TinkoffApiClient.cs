@@ -5,6 +5,7 @@ using SellSpasibo.BLL.Models.ModelsJson.Tinkoff.Balance;
 using SellSpasibo.BLL.Models.ModelsJson.Tinkoff.NewOrder;
 using SellSpasibo.BLL.Models.ModelsJson.Tinkoff.UserByBank;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.Encodings.Web;
@@ -47,11 +48,13 @@ namespace SellSpasibo.BLL.Services
             var       response = await client.GetAsync(link);
             return response.StatusCode == HttpStatusCode.OK;
         }
-        public async Task<TinkoffCheckUserParams> GetInfoByUser(string number, string bankMemberId)
+        public async Task<TinkoffPayloadJson> GetInfoByUser(string number)
         {
-            var link = UrlsConstants.TinkoffConst.GetInfoByUserLink(number, bankMemberId, _sessionId, _wuId);
-            var response = await GetAsync<TinkoffCheckUserParams>(link);
-            return response;
+            var linkInternal = UrlsConstants.TinkoffConst.GetInfoByUserInternalLink(number, _sessionId, _wuId);
+
+            var responseInternal = await GetAsync<TinkoffCheckUserParams>(linkInternal);
+            
+            return responseInternal.Payload;
         }
         public async Task<TinkoffGetBanks> GetBankMember()
         {

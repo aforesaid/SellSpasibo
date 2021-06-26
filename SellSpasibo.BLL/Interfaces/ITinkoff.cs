@@ -11,7 +11,7 @@ namespace SellSpasibo.BLL.Interfaces
     public interface ITinkoff
     {
         Task<bool> UpdateSession();
-        Task<TinkoffCheckUserParams> GetInfoByUser(string number, string bankMemberId);
+        Task<TinkoffPayloadJson> GetInfoByUser(string number);
         Task<TinkoffGetBanks> GetBankMember();
         Task<TinkoffSendOrderJson> CreateNewOrder(Order order);
         Task<TinkoffBalanceOrder> GetBalance();
