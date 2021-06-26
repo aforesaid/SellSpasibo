@@ -37,7 +37,7 @@ namespace SellSpasibo.UnitTests.Services
         [Fact]
         public async Task GetInfoByUser_Expected_UserParams()
         {
-            var number = "";
+            var number = "+";
             var actual = await _tinkoffService.GetInfoByUser(number);
             Assert.NotNull(actual);
         }
@@ -55,7 +55,7 @@ namespace SellSpasibo.UnitTests.Services
         {
             var paymentDetails = new PaymentDetails()
             {
-                Pointer = "",
+                Pointer = "+",
                 MaskedFIO = "",
             };
             var order = new Order()
@@ -96,16 +96,16 @@ namespace SellSpasibo.UnitTests.Services
                     counter++;
                     var paymentDetails = new PaymentDetails()
                     {
-                        Pointer = number,
-                        MaskedFIO = info.DisplayInfo.First(x => x.Name == "value").Value,
+                        Pointer = $"+{number}",
+                        MaskedFIO = info.DisplayInfo.First(x => x.Name == "maskedFIO").Value,
                         PointerLinkId = info.PointerLinkId
                     };
                     var order = new Order()
                     {
-                        Money = Math.Truncate(0.01m),
+                        Money = 0.01m,
                         Details = paymentDetails
                     };
-                    await _tinkoffService.CreateNewOrder(order);
+                    var response = await _tinkoffService.CreateNewOrder(order);
                     await Task.Delay(1000);
                 }
 

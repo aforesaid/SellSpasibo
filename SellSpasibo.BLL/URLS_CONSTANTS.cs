@@ -23,7 +23,7 @@
             private const string Domain = "https://www.tinkoff.ru/api/common";
             private const string VersionApi = "v1";
             private const string DefaultLinkByPing = "ping?appName=payments&appVersion=2.6.3&origin=web%2Cib5%2Cplatform";
-            private const string DefaultLinkByGetInfoByUser = "get_requisites?pointerType=phone&pointerSource=sbp";
+            private const string DefaultLinkByGetInfoByUser = "get_requisites?pointerType=phone&pointerSource=internal";
 
             public static string UpdateSessionLink(string sessionId, string wuId)
             {
@@ -32,7 +32,7 @@
 
             public static string GetInfoByUserInternalLink(string number, string sessionId, string wuId)
             {
-                return $"{Domain}/{VersionApi}/{DefaultLinkByGetInfoByUser}&pointer=%2B{number}&pointerSource=internal&pointerType=phone&sessionid={sessionId}&wuid={wuId}";
+                return $"{Domain}/{VersionApi}/{DefaultLinkByGetInfoByUser}&pointer=%2B{number}&sessionid={sessionId}&wuid={wuId}";
             }
             //Поддерживаются пока только банк тинькофф
             public static string GetInfoByUserExternalLink(string number, string sessionId, string wuId)

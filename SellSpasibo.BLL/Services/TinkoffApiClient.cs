@@ -54,7 +54,7 @@ namespace SellSpasibo.BLL.Services
 
             var responseInternal = await GetAsync<TinkoffCheckUserParams>(linkInternal);
             
-            return responseInternal.Payload;
+            return responseInternal.Payload.FirstOrDefault();
         }
         public async Task<TinkoffGetBanks> GetBankMember()
         {

@@ -8,7 +8,7 @@ namespace SellSpasibo.BLL.Models.ModelsJson.Tinkoff.NewOrder
         public TinkoffAmountByNewOrder Amount { get; set; }
         [JsonPropertyName("amountWithCommission")]
         public TinkoffAmountByNewOrder AmountWithCommission { get; set; }
-        [JsonPropertyName("Commission")]
+        [JsonPropertyName("commission")]
         public TinkoffAmountByNewOrder Commission { get; set; }
     }
 }
