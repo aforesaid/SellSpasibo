@@ -10,7 +10,7 @@ namespace SellSpasibo.Services.BackgroundServices
 {
     public class TinkoffTimedHostedService : IHostedService, IDisposable
     {
-        private int executionCount = 0;
+        private int _executionCount = 0;
         private readonly ILogger<TinkoffTimedHostedService> _logger;
         private Timer _timer;
         private const int TimerSeconds = 120;
@@ -34,7 +34,7 @@ namespace SellSpasibo.Services.BackgroundServices
 
         private async void DoWork(object state)
         {
-            var count = Interlocked.Increment(ref executionCount);
+            var count = Interlocked.Increment(ref _executionCount);
             using var scope = _services.CreateScope();
             var serviceTinkoff = scope.ServiceProvider.GetService<ITinkoff>();
            await serviceTinkoff.UpdateSession();
