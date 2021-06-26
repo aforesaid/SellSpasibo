@@ -15,8 +15,5 @@ namespace SellSpasibo.BLL.Models.ModelsJson
         public string Currency { get; set; } = "RUB";
         [JsonPropertyName("providerFields")]
         public PaymentDetails Details { get; set; }
-
-        public override string ToString()
-            => JsonSerializer.Serialize(this);
     }
 }

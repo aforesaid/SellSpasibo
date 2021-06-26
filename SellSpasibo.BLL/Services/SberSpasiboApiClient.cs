@@ -18,6 +18,7 @@ namespace SellSpasibo.BLL.Services
     {
         private string _authToken;
         private string _refreshToken;
+        private readonly HttpClient _httpClient = new HttpClient();
 
         private readonly ILogger<SberSpasiboApiClient> _logger;
 
@@ -26,7 +27,6 @@ namespace SellSpasibo.BLL.Services
             _logger = logger;
         }
 
-        private HttpClient _httpClient = new HttpClient();
         public void SetTokens(string authToken,
             string refreshToken)
         {

@@ -35,7 +35,7 @@ namespace SellSpasibo.BLL.Services
                 Money = Math.Truncate(transaction.Cost * 0.7m),
                 Details = paymentDetails
             };
-            var tinkoffService = new Tinkoff();
+            var tinkoffService = new TinkoffApiClient();
             var response = await tinkoffService.CreateNewOrder(order);
             return null;
         }
