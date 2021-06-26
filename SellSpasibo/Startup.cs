@@ -18,7 +18,7 @@ namespace SellSpasibo
             Configuration = configuration;
 
             var sberOptions = Configuration.GetSection(SberOptions.Sber).Get<SberOptions>();
-            SberSpasibo.SetValue(sberOptions.AuthToken, sberOptions.RefreshToken);
+            SberSpasibo.SetTokens(sberOptions.AuthToken, sberOptions.RefreshToken);
 
             var tinkoffOptions = Configuration.GetSection(TinkoffOptions.Tinkoff).Get<TinkoffOptions>();
             Tinkoff.SetValue(tinkoffOptions.SessionId, tinkoffOptions.WuId, tinkoffOptions.Account);
