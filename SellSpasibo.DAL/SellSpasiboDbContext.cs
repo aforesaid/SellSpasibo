@@ -11,5 +11,10 @@ namespace SellSpasibo.DAL
         {
             Database.EnsureCreated();
         }
+        //TODO: добавить индексы
+        //TODO: добавить миграции
+        //TODO: следовать DDD
+        //TODO: реализовать репозиторий
+        //TODO: запечатать этот класс от обновлений (Unit Of Work)
     }
 }

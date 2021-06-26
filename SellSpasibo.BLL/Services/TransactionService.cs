@@ -20,10 +20,14 @@ namespace SellSpasibo.BLL.Services
 
         public async Task<TinkoffSendOrderJson> CreateNewSberSpasiboOrder(Transaction transaction)
         {
-            if (!await IsValid(transaction)) return null;
+            if (!await IsValid(transaction)) 
+                return null;
+            
             var bank = await GetInfoByBank(transaction.BankName);
+            
             if (bank == null)
                 return null;
+            
             var paymentDetails = new PaymentDetails()
             {
                 Pointer = $"+{transaction.Number}",
