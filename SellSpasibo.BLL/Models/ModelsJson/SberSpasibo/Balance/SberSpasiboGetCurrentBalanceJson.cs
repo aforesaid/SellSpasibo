@@ -6,5 +6,7 @@ namespace SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.Balance
     {
         [JsonPropertyName("data")]
         public SberSpasiboDataJson Data { get; set; }
+        [JsonPropertyName("error")]
+        public ErrorJson Error { get; set; }
     }
 }

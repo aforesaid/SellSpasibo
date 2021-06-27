@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using SellSpasibo.BLL.Interfaces;
 using SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.Balance;
 using SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.CheckClient;
@@ -6,6 +8,7 @@ using SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.History;
 using SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.NewOrder;
 using System.Net.Http;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -36,6 +39,7 @@ namespace SellSpasibo.BLL.Services
         {
             _authToken = authToken;
             _refreshToken = refreshToken;
+            _httpClient.DefaultRequestHeaders.Remove("Authorization");
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_authToken}");
         }
 
@@ -44,16 +48,36 @@ namespace SellSpasibo.BLL.Services
             var link = UrlsConstants.SberConst.UpdateSessionLink;
             var request = new UpdateSessionRequestJson(_refreshToken);
             var response = await PostAsync<UpdateSessionRequestJson, DataUpdateToken>(link, request);
-            SetTokens(response.Info.Token, response.Info.RefreshToken);
-            return true;
+            if (response.IsSuccess)
+            {
+                SetTokens(response.Info.Token, response.Info.RefreshToken);
+            }
+            return response.IsSuccess;
         }
 
-        public async Task<SberSpasiboGetHistoryJson> GetTransactionHistory()
+        public async Task<SberSpasiboTransactionJson[]> GetTransactionHistory()
         {
-            //TODO: добавить возможность прогружать всю историю
-            var link = UrlsConstants.SberConst.GetTransactionHistoryLink(1);
-            var response = await GetAsync<SberSpasiboGetHistoryJson>(link);
-            return response;
+            var transactionList = new List<SberSpasiboTransactionJson>();
+            var counter = 1;
+            const int countItems = 500;
+            const string partnerName = "Перевод от участника";
+            SberSpasiboTransactionJson[] items;
+            do
+            {
+                var link = UrlsConstants.SberConst.GetTransactionHistoryLink(counter, countItems);
+                var response = await GetAsync<SberSpasiboGetHistoryJson>(link);
+                items = response?.Data?.Transactions?.ToArray();
+                
+                if (items != null)
+                {
+                    transactionList.AddRange(items
+                        .Where(x => x.PartnerName == partnerName));
+                    counter++;
+                }
+                
+            } while (items?.Length == countItems);
+
+            return transactionList.ToArray();
         }
 
         public async Task<SberSpasiboNewOrderJson> CreateNewOrder(double cost, string number)
@@ -83,11 +107,16 @@ namespace SellSpasibo.BLL.Services
         {
             try
             {
-                var contentString = JsonSerializer.Serialize(request);
+                var jsonSerializerOptions = new JsonSerializerOptions
+                {
+                    Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                };
+                var contentString = JsonSerializer.Serialize(request, jsonSerializerOptions);
                 var content = new StringContent(contentString, Encoding.UTF8, "application/json");
                 var response = await _httpClient.PostAsync(url, content);
                 var responseString = await response.Content.ReadAsStringAsync();
-                var result = JsonSerializer.Deserialize<TResponse>(responseString);
+                var result = JsonSerializer.Deserialize<TResponse>(responseString, jsonSerializerOptions);
                 return result;
             }
             catch (Exception e)
@@ -103,7 +132,10 @@ namespace SellSpasibo.BLL.Services
             {
                 var response = await _httpClient.GetAsync(url);
                 var responseString = await response.Content.ReadAsStringAsync();
-                var result = JsonSerializer.Deserialize<TResponse>(responseString);
+                var result = JsonSerializer.Deserialize<TResponse>(responseString, new JsonSerializerOptions
+                {
+                    Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+                });
                 return result;
             }
             catch (Exception e)

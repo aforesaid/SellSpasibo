@@ -9,7 +9,7 @@ namespace SellSpasibo.BLL.Interfaces
     public interface ISberSpasibo
     {
         Task<bool> UpdateSession();
-        Task<SberSpasiboGetHistoryJson> GetTransactionHistory();
+        Task<SberSpasiboTransactionJson[]> GetTransactionHistory();
         Task<SberSpasiboNewOrderJson> CreateNewOrder(double cost, string number);
         Task<SberSpasiboCheckClientJson> CheckClient(string number);
         Task<SberSpasiboGetCurrentBalanceJson> GetBalance();

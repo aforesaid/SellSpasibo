@@ -10,5 +10,7 @@ namespace SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.History
         public string Date { get; set; }
         [JsonPropertyName("operationTime")]
         public string Time { get; set; }
+        [JsonPropertyName("partnerName")]
+        public string PartnerName { get; set; }
     }
 }

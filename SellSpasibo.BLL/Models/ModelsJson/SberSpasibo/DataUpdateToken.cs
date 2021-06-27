@@ -6,6 +6,13 @@ namespace SellSpasibo.BLL.Models.ModelsJson.SberSpasibo
     {
         [JsonPropertyName("data")]
         public UpdateToken Info { get; set; }
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+        [JsonPropertyName("error")]
+        public ErrorJson Error { get; set; }
+
+        public bool IsSuccess => 
+            Status == "refresh";
     }
     public class UpdateToken
     {

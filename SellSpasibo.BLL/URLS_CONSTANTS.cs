@@ -5,7 +5,6 @@
         public static class SberConst
         {
             private const string Domain = "https://new.spasibosberbank.ru/api/online";
-            private const int DefaultCountTransactionByQuery = 500;
 
             public static string UpdateSessionLink = $"{Domain}/auth/refresh";
             public static string CreateNewOrderLink = $"{Domain}/personal/loyalitySystem/convert";
@@ -13,9 +12,9 @@
             public static string CheckClientLink = $"{Domain}/personal/loyalitySystem/converter/checkToClient";
 
 
-            public static string GetTransactionHistoryLink(int page)
+            public static string GetTransactionHistoryLink(int page, int countItems)
             {
-                return $"{Domain}/personal/loyalitySystem/transactions?page={page}&cnt={DefaultCountTransactionByQuery}";
+                return $"{Domain}/personal/loyalitySystem/transactions?page={page}&cnt={countItems}";
             }
         }
         public static class TinkoffConst
