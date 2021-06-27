@@ -9,13 +9,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SellSpasibo.Core.Interfaces;
+using SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.CreateNewOrder;
+using SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.GetBalance;
+using SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.GetBankMember;
 using SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.GetInfoByUser;
-using SellSpasibo.Core.Models.ModelsJson;
-using SellSpasibo.Core.Models.ModelsJson.Tinkoff.AnyBanks;
-using SellSpasibo.Core.Models.ModelsJson.Tinkoff.Balance;
-using SellSpasibo.Core.Models.ModelsJson.Tinkoff.NewOrder;
-using SellSpasibo.Core.Models.ModelsJson.Tinkoff.Requests;
-using SellSpasibo.Core.Models.ModelsJson.Tinkoff.UserByBank;
 using SellSpasibo.Core.Options;
 
 namespace SellSpasibo.Core.Services
@@ -49,22 +46,22 @@ namespace SellSpasibo.Core.Services
             var       response = await client.GetAsync(link);
             return response.StatusCode == HttpStatusCode.OK;
         }
-        public async Task<TAPITinkoffPayloadJson> GetInfoByUser(string number)
+        public async Task<TAPIGetInfoByUserPayload> GetInfoByUser(string number)
         {
             var linkInternal = UrlsConstants.TinkoffConst.GetInfoByUserInternalLink(number, _sessionId, _wuId);
 
-            var responseInternal = await GetAsync<TAPITinkoffCheckUserParams>(linkInternal);
+            var responseInternal = await GetAsync<TAPIGetInfoByUserResponse>(linkInternal);
             
             return responseInternal.Payload.FirstOrDefault();
         }
-        public async Task<TinkoffGetBanks> GetBankMember()
+        public async Task<TAPIGetBankMemberResponse> GetBankMember()
         {
             var link = UrlsConstants.TinkoffConst.GetBankMemberLink(_sessionId, _wuId);
-            var       response = await GetAsync<TinkoffGetBanks>(link);
+            var       response = await GetAsync<TAPIGetBankMemberResponse>(link);
             return response;
         }
 
-        public async Task<TAPITinkoffSendOrderJson> CreateNewOrder(TAPIOrder order)
+        public async Task<TAPICreateNewOrderResponse> CreateNewOrder(TAPICreateNewOrderRequest order)
         {
             //TODO: исправить сериализацию ответа, не сериализуется
             order.Account = _account;
@@ -72,16 +69,16 @@ namespace SellSpasibo.Core.Services
             var link = UrlsConstants.TinkoffConst.CreateNewOrderLink(_sessionId, _wuId);
             const string columnName = "payParameters";
             
-            var response = await PostAsync<TAPIOrder,TAPITinkoffSendOrderJson>(link, columnName, order);
+            var response = await PostAsync<TAPICreateNewOrderRequest,TAPICreateNewOrderResponse>(link, columnName, order);
             return response;
         }
 
-        public async Task<TAPITinkoffBalanceOrder> GetBalance()
+        public async Task<TAPIGetBalanceResponse> GetBalance()
         {
             var link = UrlsConstants.TinkoffConst.GetBalanceLink(_sessionId);
             const string columnName = "requestsData";
-            var request = new TAPIGetBalanceRequestJson(_wuId);
-            var response = await PostAsync<TAPIGetBalanceRequestJson[], TAPITinkoffBalanceOrder>(link, columnName, request.ToRequest());
+            var request = new TAPIGetBalanceRequestItem(_wuId);
+            var response = await PostAsync<TAPIGetBalanceRequestItem[], TAPIGetBalanceResponse>(link, columnName, request.ToRequest());
             return response;
         }
         private async Task<TResponse> PostAsync<TRequest, TResponse>(string url, string columnName,

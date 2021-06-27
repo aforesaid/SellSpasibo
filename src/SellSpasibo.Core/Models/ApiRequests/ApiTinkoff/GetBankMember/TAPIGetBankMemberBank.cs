@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SellSpasibo.Core.Models.ModelsJson.Tinkoff.AnyBanks
+namespace SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.GetBankMember
 {
-    public class TinkoffBankJson
+    public class TAPIGetBankMemberBank
     {
         [JsonPropertyName("bankMemberId")]
         public string BankMemberId { get; set; }

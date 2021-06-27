@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SellSpasibo.Core.Models.ModelsJson
+namespace SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.CreateNewOrder
 {
-    public class TAPIPaymentDetails
+    public class TAPICreateNewOrdersPaymentDetails
     {
         [JsonPropertyName("pointerType")] 
         public string PointerType { get; set; } = "8276";

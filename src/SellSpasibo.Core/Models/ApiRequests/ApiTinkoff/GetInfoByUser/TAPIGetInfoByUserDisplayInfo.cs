@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SellSpasibo.Core.Models.ModelsJson.Tinkoff.UserByBank
+namespace SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.GetInfoByUser
 {
-    public class TAPITinkoffDisplayInfoByUserJson
+    public class TAPIGetInfoByUserDisplayInfo
     {
         [JsonPropertyName("name")]
         public string Name { get; set; }

@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace SellSpasibo.Core.Models.ModelsJson.Tinkoff.AnyBanks
+namespace SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.GetBankMember
 {
-    public class TinkoffGetBanks
+    public class TAPIGetBankMemberResponse
     {
         [JsonPropertyName("payload")]
-        public List<TinkoffBankJson> Payload { get; set; }
+        public List<TAPIGetBankMemberBank> Payload { get; set; }
         [JsonPropertyName("resultCode")]
         public string ResultCode { get; set; }
     }

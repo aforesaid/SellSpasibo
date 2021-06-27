@@ -1,18 +1,16 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using SellSpasibo.Core.Interfaces;
+using SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.CreateNewOrder;
 using SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.GetInfoByUser;
-using SellSpasibo.Core.Models.ModelsJson;
-using SellSpasibo.Core.Models.ModelsJson.Tinkoff.UserByBank;
 using SellSpasibo.Core.Options;
 using SellSpasibo.Core.Services;
 using Xunit;
 
-namespace SellSpasibo.API.UnitTests.Services
+namespace SellSpasibo.UnitTests.Services
 {
     public class TinkoffApiClientTest
     {
@@ -54,12 +52,12 @@ namespace SellSpasibo.API.UnitTests.Services
         [Fact]
         public async Task CreateNewoOrder_Expected_TinkoffSendOrder()
         {
-            var paymentDetails = new TAPIPaymentDetails()
+            var paymentDetails = new TAPICreateNewOrdersPaymentDetails()
             {
                 Pointer = "+",
                 MaskedFIO = "",
             };
-            var order = new TAPIOrder()
+            var order = new TAPICreateNewOrderRequest()
             {
                 Money = 0.01d,
                 Details = paymentDetails
@@ -87,7 +85,7 @@ namespace SellSpasibo.API.UnitTests.Services
             
            
 
-            TAPITinkoffPayloadJson info;
+            TAPIGetInfoByUserPayload info;
             var counter = 0;
             do
             { 
@@ -95,13 +93,13 @@ namespace SellSpasibo.API.UnitTests.Services
                 if (info != null)
                 {
                     counter++;
-                    var paymentDetails = new TAPIPaymentDetails()
+                    var paymentDetails = new TAPICreateNewOrdersPaymentDetails()
                     {
                         Pointer = $"+{number}",
                         MaskedFIO = info.DisplayInfo.First(x => x.Name == "maskedFIO").Value,
                         PointerLinkId = info.PointerLinkId
                     };
-                    var order = new TAPIOrder()
+                    var order = new TAPICreateNewOrderRequest()
                     {
                         Money = 0.01d,
                         Details = paymentDetails

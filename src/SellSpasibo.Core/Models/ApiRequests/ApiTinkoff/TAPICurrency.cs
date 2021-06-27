@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SellSpasibo.Core.Models.ModelsJson.Tinkoff
+namespace SellSpasibo.Core.Models.ApiRequests.ApiTinkoff
 {
-    public class TAPITinkoffCurrency
+    public class TAPICurrency
     {
         [JsonPropertyName("code")]
         public int Code { get; set; }

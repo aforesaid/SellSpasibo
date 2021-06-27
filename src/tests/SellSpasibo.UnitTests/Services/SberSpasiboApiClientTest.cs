@@ -9,7 +9,7 @@ using SellSpasibo.Core.Options;
 using SellSpasibo.Core.Services;
 using Xunit;
 
-namespace SellSpasibo.API.UnitTests.Services
+namespace SellSpasibo.UnitTests.Services
 {
     public class SberSpasiboApiClientTest
     {

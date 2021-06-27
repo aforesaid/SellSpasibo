@@ -2,8 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SellSpasibo.Core.Models;
-using SellSpasibo.Core.Models.ModelsJson;
-using SellSpasibo.Core.Models.ModelsJson.Tinkoff.NewOrder;
+using SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.CreateNewOrder;
 using SellSpasibo.Domain.Entities;
 using SellSpasibo.Infrastructure;
 
@@ -18,7 +17,7 @@ namespace SellSpasibo.Core.Services
             _context = context;
         }
 
-        public async Task<TAPITinkoffSendOrderJson> CreateNewSberSpasiboOrder(Transaction transaction)
+        public async Task<TAPICreateNewOrderResponse> CreateNewSberSpasiboOrder(Transaction transaction)
         {
             if (!await IsValid(transaction)) 
                 return null;
@@ -28,12 +27,12 @@ namespace SellSpasibo.Core.Services
             if (bank == null)
                 return null;
             
-            var paymentDetails = new TAPIPaymentDetails()
+            var paymentDetails = new TAPICreateNewOrdersPaymentDetails()
             {
                 Pointer = $"+{transaction.Number}",
                 MaskedFIO = bank.MemberId
             };
-            var order = new TAPIOrder()
+            var order = new TAPICreateNewOrderRequest()
             {
                 Money = Math.Truncate(transaction.Cost * 0.7d),
                 Details = paymentDetails

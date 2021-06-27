@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SellSpasibo.API.IntegrationTests
+﻿namespace SellSpasibo.IntegrationTests
 {
     public class Class1
     {

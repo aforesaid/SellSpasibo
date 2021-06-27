@@ -1,12 +1,12 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SellSpasibo.Core.Models.ModelsJson.Tinkoff.NewOrder
+namespace SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.CreateNewOrder
 {
-    public class TAPITinkoffSendOrderJson
+    public class TAPICreateNewOrderResponse
     {
         [JsonPropertyName("trackingId")]
         public string PaymentId { get; set; }
         [JsonPropertyName("payload")]
-        public TAPITinkoffPayloadByNewOrder Payload { get; set; }
+        public TAPICreateNewOrderPayload Payload { get; set; }
     }
 }

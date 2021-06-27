@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SellSpasibo.Core.Models.ModelsJson
+namespace SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.CreateNewOrder
 {
-    public class TAPIOrder
+    public class TAPICreateNewOrderRequest
     {
         [JsonPropertyName("account")]
         public string Account { get; set; }
@@ -13,6 +13,6 @@ namespace SellSpasibo.Core.Models.ModelsJson
         [JsonPropertyName("currency")]
         public string Currency { get; set; } = "RUB";
         [JsonPropertyName("providerFields")]
-        public TAPIPaymentDetails Details { get; set; }
+        public TAPICreateNewOrdersPaymentDetails Details { get; set; }
     }
 }
