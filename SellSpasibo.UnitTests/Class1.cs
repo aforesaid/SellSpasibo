@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SellSpasibo.UnitTests
+namespace SellSpasibo.API.UnitTests
 {
     public class Class1
     {

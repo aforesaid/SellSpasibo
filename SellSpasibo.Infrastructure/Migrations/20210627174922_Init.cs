@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace SellSpasibo.Infrastructure.Migrations
+namespace SellSpasibo.API.Infrastructure.Migrations
 {
     public partial class Init : Migration
     {

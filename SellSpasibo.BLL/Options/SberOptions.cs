@@ -1,9 +1,0 @@
-﻿namespace SellSpasibo.BLL.Options
-{
-    public class SberOptions
-    {
-        public const string Sber = "Sber";
-        public string AuthToken { get; set; }
-        public string RefreshToken { get; set; }
-    }
-}

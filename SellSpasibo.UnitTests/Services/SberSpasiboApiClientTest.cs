@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using SellSpasibo.BLL.Interfaces;
-using SellSpasibo.BLL.Options;
-using SellSpasibo.BLL.Services;
+using SellSpasibo.Core.Interfaces;
+using SellSpasibo.Core.Options;
+using SellSpasibo.Core.Services;
 using Xunit;
 
-namespace SellSpasibo.UnitTests.Services
+namespace SellSpasibo.API.UnitTests.Services
 {
     public class SberSpasiboApiClientTest
     {

@@ -6,7 +6,7 @@
   </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SellSpasibo.BLL\SellSpasibo.BLL.csproj" />
+      <ProjectReference Include="..\SellSpasibo.Core\SellSpasibo.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>

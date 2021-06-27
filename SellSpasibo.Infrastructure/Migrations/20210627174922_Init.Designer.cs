@@ -5,9 +5,10 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using SellSpasibo.API.Infrastructure;
 using SellSpasibo.Infrastructure;
 
-namespace SellSpasibo.Infrastructure.Migrations
+namespace SellSpasibo.API.Infrastructure.Migrations
 {
     [DbContext(typeof(SellSpasiboDbContext))]
     [Migration("20210627174922_Init")]
@@ -21,7 +22,7 @@ namespace SellSpasibo.Infrastructure.Migrations
                 .HasAnnotation("ProductVersion", "5.0.7")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-            modelBuilder.Entity("SellSpasibo.Domain.Entities.BankEntity", b =>
+            modelBuilder.Entity("SellSpasibo.API.Domain.Entities.BankEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -53,7 +54,7 @@ namespace SellSpasibo.Infrastructure.Migrations
                     b.ToTable("Banks");
                 });
 
-            modelBuilder.Entity("SellSpasibo.Domain.Entities.TransactionEntity", b =>
+            modelBuilder.Entity("SellSpasibo.API.Domain.Entities.TransactionEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -98,7 +99,7 @@ namespace SellSpasibo.Infrastructure.Migrations
                     b.ToTable("Transactions");
                 });
 
-            modelBuilder.Entity("SellSpasibo.Domain.Entities.UserInfoEntity", b =>
+            modelBuilder.Entity("SellSpasibo.API.Domain.Entities.UserInfoEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
