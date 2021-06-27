@@ -24,7 +24,7 @@ namespace SellSpasibo
             services.AddDbContext<SellSpasiboDbContext>(options =>
             {
                 //TODO: реализовать работу с бд посредством PostgreSQL
-                options.UseInMemoryDatabase("db");
+                options.UseNpgsql("User ID=postgres;Password=root;Server=localhost;Port=5432;Database=sell_spasibo;Integrated Security=true;");
             });
             
             services.Configure<SberOptions>(Configuration.GetSection(SberOptions.Sber));
