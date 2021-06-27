@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using SellSpasibo.BLL.Interfaces;
-using SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.Balance;
-using SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.CheckClient;
-using SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.History;
-using SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.NewOrder;
 using System.Net.Http;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -13,8 +9,11 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using SellSpasibo.BLL.Models.ModelsJson.SberSpasibo;
-using SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.Requests;
+using SellSpasibo.BLL.Models.ApiRequests.ApiSberSpasibo.CheckClient;
+using SellSpasibo.BLL.Models.ApiRequests.ApiSberSpasibo.CreateNewOrder;
+using SellSpasibo.BLL.Models.ApiRequests.ApiSberSpasibo.GetBalance;
+using SellSpasibo.BLL.Models.ApiRequests.ApiSberSpasibo.GetTransactionHistory;
+using SellSpasibo.BLL.Models.ApiRequests.ApiSberSpasibo.UpdateSession;
 using SellSpasibo.BLL.Options;
 
 namespace SellSpasibo.BLL.Services
@@ -46,8 +45,8 @@ namespace SellSpasibo.BLL.Services
         public async Task<bool> UpdateSession()
         {
             var link = UrlsConstants.SberConst.UpdateSessionLink;
-            var request = new UpdateSessionRequestJson(_refreshToken);
-            var response = await PostAsync<UpdateSessionRequestJson, DataUpdateToken>(link, request);
+            var request = new SAPIUpdateSessionRequest(_refreshToken);
+            var response = await PostAsync<SAPIUpdateSessionRequest, SAPIUpdateSessionResponse>(link, request);
             if (response.IsSuccess)
             {
                 SetTokens(response.Info.Token, response.Info.RefreshToken);
@@ -55,17 +54,17 @@ namespace SellSpasibo.BLL.Services
             return response.IsSuccess;
         }
 
-        public async Task<SberSpasiboTransactionJson[]> GetTransactionHistory()
+        public async Task<SAPITransaction[]> GetTransactionHistory()
         {
-            var transactionList = new List<SberSpasiboTransactionJson>();
+            var transactionList = new List<SAPITransaction>();
             var counter = 1;
             const int countItems = 500;
             const string partnerName = "Перевод от участника";
-            SberSpasiboTransactionJson[] items;
+            SAPITransaction[] items;
             do
             {
                 var link = UrlsConstants.SberConst.GetTransactionHistoryLink(counter, countItems);
-                var response = await GetAsync<SberSpasiboGetHistoryJson>(link);
+                var response = await GetAsync<SAPIGetHistoryResponse>(link);
                 items = response?.Data?.Transactions?.ToArray();
                 
                 if (items != null)
@@ -80,25 +79,25 @@ namespace SellSpasibo.BLL.Services
             return transactionList.ToArray();
         }
 
-        public async Task<SberSpasiboNewOrderJson> CreateNewOrder(double cost, string number)
+        public async Task<SAPICreateNewOrderResponse> CreateNewOrder(double cost, string number)
         {
-            var request = new CreateNewOrderRequestJson(cost, number);
+            var request = new SAPICreateNewOrderRequest(cost, number);
             var link = UrlsConstants.SberConst.CreateNewOrderLink;
-            var response = await PostAsync<CreateNewOrderRequestJson, SberSpasiboNewOrderJson>(link, request);
+            var response = await PostAsync<SAPICreateNewOrderRequest, SAPICreateNewOrderResponse>(link, request);
             return response;
         }
 
-        public async Task<SberSpasiboGetCurrentBalanceJson> GetBalance()
+        public async Task<SAPIGetCurrentBalanceResponse> GetBalance()
         {
             var link = UrlsConstants.SberConst.GetBalanceLink;
-            var response = await GetAsync<SberSpasiboGetCurrentBalanceJson>(link);
+            var response = await GetAsync<SAPIGetCurrentBalanceResponse>(link);
             return response;
         }
-        public async Task<SberSpasiboCheckClientJson> CheckClient(string phone)
+        public async Task<SAPICheckClientResponse> CheckClient(string phone)
         {
-            var request = new CheckClientRequestJson(phone);
+            var request = new SAPICheckClientRequest(phone);
             var link = UrlsConstants.SberConst.CheckClientLink;
-            var response = await PostAsync<CheckClientRequestJson, SberSpasiboCheckClientJson>(link, request);
+            var response = await PostAsync<SAPICheckClientRequest, SAPICheckClientResponse>(link, request);
             return response;
         }
 

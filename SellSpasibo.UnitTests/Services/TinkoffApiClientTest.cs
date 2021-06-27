@@ -60,7 +60,7 @@ namespace SellSpasibo.UnitTests.Services
             };
             var order = new Order()
             {
-                Money = Math.Truncate(0.01m),
+                Money = 0.01d,
                 Details = paymentDetails
             };     
             var actual = await _tinkoffService.CreateNewOrder(order);
@@ -102,7 +102,7 @@ namespace SellSpasibo.UnitTests.Services
                     };
                     var order = new Order()
                     {
-                        Money = 0.01m,
+                        Money = 0.01d,
                         Details = paymentDetails
                     };
                     var response = await _tinkoffService.CreateNewOrder(order);

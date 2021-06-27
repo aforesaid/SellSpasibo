@@ -7,6 +7,6 @@ namespace SellSpasibo.BLL.Models
         public string Number { get; set; }
         public string BankName { get; set; }
         public DateTime DateTime { get; set; }
-        public decimal Cost { get; set; }
+        public double Cost { get; set; }
     }
 }

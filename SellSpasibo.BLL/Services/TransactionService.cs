@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using SellSpasibo.BLL.Models;
 using SellSpasibo.BLL.Models.ModelsJson;
 using SellSpasibo.BLL.Models.ModelsJson.Tinkoff.NewOrder;
-using SellSpasibo.DAL;
-using SellSpasibo.DAL.Entities;
-using Transaction = SellSpasibo.BLL.Models.Transaction;
+using SellSpasibo.Domain.Entities;
+using SellSpasibo.Infrastructure;
 
 namespace SellSpasibo.BLL.Services
 {
@@ -35,7 +35,7 @@ namespace SellSpasibo.BLL.Services
             };
             var order = new Order()
             {
-                Money = Math.Truncate(transaction.Cost * 0.7m),
+                Money = Math.Truncate(transaction.Cost * 0.7d),
                 Details = paymentDetails
             };
             // var tinkoffService = new TinkoffApiClient();
@@ -56,7 +56,7 @@ namespace SellSpasibo.BLL.Services
         /// </summary>
         /// <param name="nameBank">Название искомого банка</param>
         /// <returns>Детальная информация по банку</returns>
-        private async Task<Bank> GetInfoByBank(string nameBank)
+        private async Task<BankEntity> GetInfoByBank(string nameBank)
             => await _context.Banks.FirstOrDefaultAsync(item => item.Name == nameBank);
 
     }

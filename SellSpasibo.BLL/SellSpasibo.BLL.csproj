@@ -1,15 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="DTOs\" />
+    <Folder Include="Models\ApiRequests\ApiTinkoff" />
+    <Folder Include="Models\ModelsJson\SberSpasibo" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SellSpasibo.DAL\SellSpasibo.DAL.csproj" />
+    <ProjectReference Include="..\SellSpasibo.Infrastructure\SellSpasibo.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

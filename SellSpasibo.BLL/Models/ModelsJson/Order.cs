@@ -8,7 +8,7 @@ namespace SellSpasibo.BLL.Models.ModelsJson
         [JsonPropertyName("account")]
         public string Account { get; set; }
         [JsonPropertyName("moneyAmount")]
-        public decimal Money { get; set; }
+        public double Money { get; set; }
         [JsonPropertyName("provider")]
         public string Provider { get; set; } = "p2p-anybank";
         [JsonPropertyName("currency")]

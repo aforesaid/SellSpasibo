@@ -1,17 +1,17 @@
-﻿using SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.Balance;
-using SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.CheckClient;
-using SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.History;
-using SellSpasibo.BLL.Models.ModelsJson.SberSpasibo.NewOrder;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using SellSpasibo.BLL.Models.ApiRequests.ApiSberSpasibo.CheckClient;
+using SellSpasibo.BLL.Models.ApiRequests.ApiSberSpasibo.CreateNewOrder;
+using SellSpasibo.BLL.Models.ApiRequests.ApiSberSpasibo.GetBalance;
+using SellSpasibo.BLL.Models.ApiRequests.ApiSberSpasibo.GetTransactionHistory;
 
 namespace SellSpasibo.BLL.Interfaces
 {
     public interface ISberSpasibo
     {
         Task<bool> UpdateSession();
-        Task<SberSpasiboTransactionJson[]> GetTransactionHistory();
-        Task<SberSpasiboNewOrderJson> CreateNewOrder(double cost, string number);
-        Task<SberSpasiboCheckClientJson> CheckClient(string number);
-        Task<SberSpasiboGetCurrentBalanceJson> GetBalance();
+        Task<SAPITransaction[]> GetTransactionHistory();
+        Task<SAPICreateNewOrderResponse> CreateNewOrder(double cost, string number);
+        Task<SAPICheckClientResponse> CheckClient(string number);
+        Task<SAPIGetCurrentBalanceResponse> GetBalance();
     }
 }
