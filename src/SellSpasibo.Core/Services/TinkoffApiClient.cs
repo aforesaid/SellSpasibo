@@ -52,7 +52,7 @@ namespace SellSpasibo.Core.Services
 
             var responseInternal = await GetAsync<TAPIGetInfoByUserResponse>(linkInternal);
             
-            return responseInternal.Payload.FirstOrDefault();
+            return responseInternal.Payload?.FirstOrDefault();
         }
         public async Task<TAPIGetBankMemberResponse> GetBankMember()
         {

@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using SellSpasibo.Core.Models.ModelsJson.Tinkoff;
 
 namespace SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.CreateNewOrder
 {
