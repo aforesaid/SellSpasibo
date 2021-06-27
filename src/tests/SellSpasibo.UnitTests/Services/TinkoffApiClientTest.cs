@@ -19,9 +19,9 @@ namespace SellSpasibo.UnitTests.Services
         {
             var options = Options.Create(new TinkoffOptions
             {
-                Account = "5359537080",
-                SessionId = "DamjyXCaYA99fj0rlAEoxxLDMVpy9pNY.m1-prod-api35",
-                WuId = "8b2bcbf7a44843c985b090f18ece2d84"
+                Account = "",
+                SessionId = "",
+                WuId = ""
             });
             var moqLogging = new Mock<ILogger<TinkoffApiClient>>();
             _tinkoffService = new TinkoffApiClient(moqLogging.Object, options);
@@ -80,7 +80,7 @@ namespace SellSpasibo.UnitTests.Services
         [Fact]
         public async Task TestCountRequestLimit_Expected_No()
         {
-            var number = "79997104978";
+            var number = "";
             string bankMemberId = null;
 
             TAPIGetInfoByUserPayload info;
