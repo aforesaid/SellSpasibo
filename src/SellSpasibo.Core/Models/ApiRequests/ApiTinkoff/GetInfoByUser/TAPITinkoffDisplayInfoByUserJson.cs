@@ -2,7 +2,7 @@
 
 namespace SellSpasibo.Core.Models.ModelsJson.Tinkoff.UserByBank
 {
-    public class TinkoffDisplayInfoByUserJson
+    public class TAPITinkoffDisplayInfoByUserJson
     {
         [JsonPropertyName("name")]
         public string Name { get; set; }

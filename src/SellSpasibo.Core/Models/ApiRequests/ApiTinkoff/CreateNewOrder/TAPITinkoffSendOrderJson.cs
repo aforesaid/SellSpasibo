@@ -2,11 +2,11 @@
 
 namespace SellSpasibo.Core.Models.ModelsJson.Tinkoff.NewOrder
 {
-    public class TinkoffSendOrderJson
+    public class TAPITinkoffSendOrderJson
     {
         [JsonPropertyName("trackingId")]
         public string PaymentId { get; set; }
         [JsonPropertyName("payload")]
-        public TinkoffPayloadByNewOrder Payload { get; set; }
+        public TAPITinkoffPayloadByNewOrder Payload { get; set; }
     }
 }

@@ -18,7 +18,7 @@ using SellSpasibo.Core.Options;
 
 namespace SellSpasibo.Core.Services
 {
-    public class SberSpasiboApiClient : ISberSpasibo
+    public class SberSpasiboApiClient : ISberSpasiboApiClient
     {
         private string _authToken;
         private string _refreshToken;

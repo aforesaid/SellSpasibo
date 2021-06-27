@@ -2,7 +2,7 @@
 
 namespace SellSpasibo.Core.Models.ModelsJson
 {
-    public class PaymentDetails
+    public class TAPIPaymentDetails
     {
         [JsonPropertyName("pointerType")] 
         public string PointerType { get; set; } = "8276";

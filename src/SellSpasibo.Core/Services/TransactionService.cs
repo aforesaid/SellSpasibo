@@ -18,7 +18,7 @@ namespace SellSpasibo.Core.Services
             _context = context;
         }
 
-        public async Task<TinkoffSendOrderJson> CreateNewSberSpasiboOrder(Transaction transaction)
+        public async Task<TAPITinkoffSendOrderJson> CreateNewSberSpasiboOrder(Transaction transaction)
         {
             if (!await IsValid(transaction)) 
                 return null;
@@ -28,12 +28,12 @@ namespace SellSpasibo.Core.Services
             if (bank == null)
                 return null;
             
-            var paymentDetails = new PaymentDetails()
+            var paymentDetails = new TAPIPaymentDetails()
             {
                 Pointer = $"+{transaction.Number}",
                 MaskedFIO = bank.MemberId
             };
-            var order = new Order()
+            var order = new TAPIOrder()
             {
                 Money = Math.Truncate(transaction.Cost * 0.7d),
                 Details = paymentDetails

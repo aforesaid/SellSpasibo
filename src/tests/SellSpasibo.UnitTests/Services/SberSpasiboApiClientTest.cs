@@ -13,7 +13,7 @@ namespace SellSpasibo.API.UnitTests.Services
 {
     public class SberSpasiboApiClientTest
     {
-        private readonly ISberSpasibo _sberSpasiboService;
+        private readonly ISberSpasiboApiClient _sberSpasiboService;
         public SberSpasiboApiClientTest()
         {
             var options = Options.Create(new SberOptions()

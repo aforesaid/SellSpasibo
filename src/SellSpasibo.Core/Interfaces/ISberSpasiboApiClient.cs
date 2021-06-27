@@ -6,7 +6,7 @@ using SellSpasibo.Core.Models.ApiRequests.ApiSberSpasibo.GetTransactionHistory;
 
 namespace SellSpasibo.Core.Interfaces
 {
-    public interface ISberSpasibo
+    public interface ISberSpRasiboApiClient
     {
         Task<bool> UpdateSession();
         Task<SAPITransaction[]> GetTransactionHistory();

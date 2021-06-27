@@ -2,11 +2,11 @@
 
 namespace SellSpasibo.Core.Models.ModelsJson.Tinkoff.Balance
 {
-    public class TinkoffInfoByCard
+    public class TAPITinkoffInfoByCard
     {
         [JsonPropertyName("id")]
         public string Id { get; set; }
         [JsonPropertyName("accountBalance")]
-        public TinkoffAccountBalance AccountBalance { get; set; }
+        public TAPITinkoffAccountBalance AccountBalance { get; set; }
     }
 }

@@ -1,11 +1,11 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SellSpasibo.Core.Models.ModelsJson.Tinkoff.NewOrder
+namespace SellSpasibo.Core.Models.ModelsJson.Tinkoff.Balance
 {
-    public class TinkoffAmountByNewOrder
+    public class TAPITinkoffAccountBalance
     {
         [JsonPropertyName("currency")]
-        public TinkoffCurrency Currency { get; set; }
+        public TAPITinkoffCurrency Currency { get; set; }
         [JsonPropertyName("value")]
         public double Value { get; set; }
     }

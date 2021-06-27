@@ -1,8 +1,8 @@
 ﻿namespace SellSpasibo.Core.Models.ModelsJson.Tinkoff.Requests
 {
-    public class GetBalanceRequestJson
+    public class TAPIGetBalanceRequestJson
     {
-        public GetBalanceRequestJson(string wuid)
+        public TAPIGetBalanceRequestJson(string wuid)
         {
             Params = new GetBalanceParamsJson(wuid);
         }
@@ -10,7 +10,7 @@
         public string Operation { get; } = "accounts_flat";
         public GetBalanceParamsJson Params { get; }
 
-        public GetBalanceRequestJson[] ToRequest()
+        public TAPIGetBalanceRequestJson[] ToRequest()
         {
             return new [] {this};
         }

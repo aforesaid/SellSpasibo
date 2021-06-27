@@ -36,7 +36,7 @@ namespace SellSpasibo.API.Services.BackgroundServices
         {
             var count = Interlocked.Increment(ref _executionCount);
             using var scope = _services.CreateScope();
-            var serviceTinkoff = scope.ServiceProvider.GetService<ITinkoff>();
+            var serviceTinkoff = scope.ServiceProvider.GetService<ITinkoffApiClient>();
            await serviceTinkoff.UpdateSession();
             _logger.LogInformation(
                                    "Tinkoff Timed Hosted Service is working. Count: {Count}", count);

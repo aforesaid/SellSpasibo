@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace SellSpasibo.Core.Models.ModelsJson.Tinkoff.Balance
 {
-    public class TinkoffBalanceOrder
+    public class TAPITinkoffBalanceOrder
     {
         [JsonPropertyName("trackingId")]
         public string TrackingId { get; set; }

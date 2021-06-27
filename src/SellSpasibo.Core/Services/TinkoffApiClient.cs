@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SellSpasibo.Core.Interfaces;
+using SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.GetInfoByUser;
 using SellSpasibo.Core.Models.ModelsJson;
 using SellSpasibo.Core.Models.ModelsJson.Tinkoff.AnyBanks;
 using SellSpasibo.Core.Models.ModelsJson.Tinkoff.Balance;
@@ -19,7 +20,7 @@ using SellSpasibo.Core.Options;
 
 namespace SellSpasibo.Core.Services
 {
-    public class TinkoffApiClient : ITinkoff
+    public class TinkoffApiClient : ITinkoffApiClient
     {
         private  string _sessionId;
         private  string _wuId;
@@ -48,11 +49,11 @@ namespace SellSpasibo.Core.Services
             var       response = await client.GetAsync(link);
             return response.StatusCode == HttpStatusCode.OK;
         }
-        public async Task<TinkoffPayloadJson> GetInfoByUser(string number)
+        public async Task<TAPITinkoffPayloadJson> GetInfoByUser(string number)
         {
             var linkInternal = UrlsConstants.TinkoffConst.GetInfoByUserInternalLink(number, _sessionId, _wuId);
 
-            var responseInternal = await GetAsync<TinkoffCheckUserParams>(linkInternal);
+            var responseInternal = await GetAsync<TAPITinkoffCheckUserParams>(linkInternal);
             
             return responseInternal.Payload.FirstOrDefault();
         }
@@ -63,7 +64,7 @@ namespace SellSpasibo.Core.Services
             return response;
         }
 
-        public async Task<TinkoffSendOrderJson> CreateNewOrder(Order order)
+        public async Task<TAPITinkoffSendOrderJson> CreateNewOrder(TAPIOrder order)
         {
             //TODO: исправить сериализацию ответа, не сериализуется
             order.Account = _account;
@@ -71,16 +72,16 @@ namespace SellSpasibo.Core.Services
             var link = UrlsConstants.TinkoffConst.CreateNewOrderLink(_sessionId, _wuId);
             const string columnName = "payParameters";
             
-            var response = await PostAsync<Order,TinkoffSendOrderJson>(link, columnName, order);
+            var response = await PostAsync<TAPIOrder,TAPITinkoffSendOrderJson>(link, columnName, order);
             return response;
         }
 
-        public async Task<TinkoffBalanceOrder> GetBalance()
+        public async Task<TAPITinkoffBalanceOrder> GetBalance()
         {
             var link = UrlsConstants.TinkoffConst.GetBalanceLink(_sessionId);
             const string columnName = "requestsData";
-            var request = new GetBalanceRequestJson(_wuId);
-            var response = await PostAsync<GetBalanceRequestJson[], TinkoffBalanceOrder>(link, columnName, request.ToRequest());
+            var request = new TAPIGetBalanceRequestJson(_wuId);
+            var response = await PostAsync<TAPIGetBalanceRequestJson[], TAPITinkoffBalanceOrder>(link, columnName, request.ToRequest());
             return response;
         }
         private async Task<TResponse> PostAsync<TRequest, TResponse>(string url, string columnName,

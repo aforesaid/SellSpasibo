@@ -2,9 +2,9 @@
 
 namespace SellSpasibo.Core.Models.ModelsJson.Tinkoff.NewOrder
 {
-    public class TinkoffPayloadByNewOrder
+    public class TAPITinkoffPayloadByNewOrder
     {
         [JsonPropertyName("commissionInfo")]
-        public TinkoffCommissionInfo CommissionInfo { get; set; }
+        public TAPITinkoffCommissionInfo CommissionInfo { get; set; }
     }
 }

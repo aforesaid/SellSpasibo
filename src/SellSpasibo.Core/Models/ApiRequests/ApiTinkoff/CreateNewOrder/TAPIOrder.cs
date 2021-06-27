@@ -2,7 +2,7 @@
 
 namespace SellSpasibo.Core.Models.ModelsJson
 {
-    public class Order
+    public class TAPIOrder
     {
         [JsonPropertyName("account")]
         public string Account { get; set; }
@@ -13,6 +13,6 @@ namespace SellSpasibo.Core.Models.ModelsJson
         [JsonPropertyName("currency")]
         public string Currency { get; set; } = "RUB";
         [JsonPropertyName("providerFields")]
-        public PaymentDetails Details { get; set; }
+        public TAPIPaymentDetails Details { get; set; }
     }
 }

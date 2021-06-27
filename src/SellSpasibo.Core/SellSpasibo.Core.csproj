@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\ApiRequests\ApiTinkoff" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SellSpasibo.Infrastructure\SellSpasibo.Infrastructure.csproj" />
   </ItemGroup>
 

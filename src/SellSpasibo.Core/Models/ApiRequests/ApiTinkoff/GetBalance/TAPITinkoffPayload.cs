@@ -3,10 +3,10 @@ using System.Text.Json.Serialization;
 
 namespace SellSpasibo.Core.Models.ModelsJson.Tinkoff.Balance
 {
-    public class TinkoffPayload
+    public class TAPITinkoffPayload
     {
         [JsonPropertyName("payload")]
-        public List<TinkoffInfoByCard> Cards { get; set; }
+        public List<TAPITinkoffInfoByCard> Cards { get; set; }
         [JsonPropertyName("resultCode")]
         public string ResultCode { get; set; }
     }
@@ -14,6 +14,6 @@ namespace SellSpasibo.Core.Models.ModelsJson.Tinkoff.Balance
     public class TinkoffPayloadInfo
     {
         [JsonPropertyName("0")]
-        public TinkoffPayload Payload { get; set; }
+        public TAPITinkoffPayload Payload { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace SellSpasibo.Core.Models.ModelsJson.Tinkoff
 {
-    public class TinkoffCurrency
+    public class TAPITinkoffCurrency
     {
         [JsonPropertyName("code")]
         public int Code { get; set; }
