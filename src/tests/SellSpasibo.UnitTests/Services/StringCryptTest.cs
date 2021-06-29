@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Moq;
+﻿using Microsoft.Extensions.Options;
 using SellSpasibo.Core.Interfaces;
 using SellSpasibo.Core.Options;
 using SellSpasibo.Core.Services;
@@ -17,8 +15,6 @@ namespace SellSpasibo.UnitTests.Services
             {
                 Key = "my_key"
             });
-            var mockLogger = new Mock<ILogger<StringCrypt>>();
-                
             _stringCrypt = new StringCrypt(options);
         }
 
@@ -26,6 +22,7 @@ namespace SellSpasibo.UnitTests.Services
         public void Input_Fasol_Output_Fasol()
         {
             const string expected = "fasol";
+            
             var cipher =  _stringCrypt.Encrypt(expected);
             var actual =  _stringCrypt.Decrypt(cipher);
             

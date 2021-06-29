@@ -2,7 +2,7 @@
 {
     public class TinkoffPayerAccount
     {
-        public TinkoffPayerAccount(string login, string password, string accountId)
+        public TinkoffPayerAccount(string login, string password, int accountId)
         {
             Login = login;
             Password = password;
@@ -11,6 +11,6 @@
 
         public string Login { get; }
         public string Password { get; }
-        public string AccountId { get; private set; }
+        public int AccountId { get; private set; }
     }
 }

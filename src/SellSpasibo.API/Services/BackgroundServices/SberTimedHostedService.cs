@@ -39,13 +39,12 @@ namespace SellSpasibo.API.Services.BackgroundServices
             using var scope = _services.CreateScope();
             var serviceSber = scope.ServiceProvider.GetService<ISberSpasiboApiClient>();
             await serviceSber.UpdateSession();
-            _logger.LogInformation(
-                                   "Tinkoff Timed Hosted Service is working. Count: {Count}", count);
+            _logger.LogInformation("Sber Timed Hosted Service is working. Count: {Count}", count);
         }
 
         public Task StopAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("Tinkoff Timed Hosted Service is stopping.");
+            _logger.LogInformation("Sber Timed Hosted Service is stopping.");
 
             _timer?.Change(Timeout.Infinite, 0);
 

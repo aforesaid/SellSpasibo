@@ -57,8 +57,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers" />
-    <Folder Include="Models" />
+    <Folder Include="ApiModels" />
+    <Folder Include="Controllers\Admin" />
   </ItemGroup>
 
 </Project>
