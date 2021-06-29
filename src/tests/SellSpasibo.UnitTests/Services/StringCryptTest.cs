@@ -26,8 +26,8 @@ namespace SellSpasibo.UnitTests.Services
         public void Input_Fasol_Output_Fasol()
         {
             const string expected = "fasol";
-            var hash =  _stringCrypt.Encrypt(expected);
-            var actual =  _stringCrypt.Decrypt(hash);
+            var cipher =  _stringCrypt.Encrypt(expected);
+            var actual =  _stringCrypt.Decrypt(cipher);
             
             Assert.Equal(expected, actual);
         }
