@@ -7,13 +7,11 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using SellSpasibo.Core.Interfaces;
 using SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.CreateNewOrder;
 using SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.GetBalance;
 using SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.GetBankMember;
 using SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.GetInfoByUser;
-using SellSpasibo.Core.Options;
 
 namespace SellSpasibo.Core.Services
 {
@@ -22,17 +20,15 @@ namespace SellSpasibo.Core.Services
         private  string _sessionId;
         private  string _wuId;
         private  string _account;
-        private readonly HttpClient _httpClient = new HttpClient();
+        private readonly HttpClient _httpClient = new();
         private readonly ILogger<TinkoffApiClient> _logger;
 
-        public TinkoffApiClient(ILogger<TinkoffApiClient> logger,
-            IOptions<TinkoffOptions> options)
+        public TinkoffApiClient(ILogger<TinkoffApiClient> logger)
         {
             _logger = logger;
-            SetTokens(options.Value.SessionId, options.Value.WuId, options.Value.Account);
         }
 
-        private void SetTokens(string sessionId, string wuId,
+        public void SetTokens(string sessionId, string wuId,
             string account)
         {
             _sessionId = sessionId;

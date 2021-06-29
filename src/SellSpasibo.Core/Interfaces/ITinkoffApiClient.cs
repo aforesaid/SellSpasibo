@@ -8,6 +8,7 @@ namespace SellSpasibo.Core.Interfaces
 {
     public interface ITinkoffApiClient
     {
+        void SetTokens(string sessionId, string wuId, string account);
         Task<bool> UpdateSession();
         Task<TAPIGetInfoByUserPayload> GetInfoByUser(string number);
         Task<TAPIGetBankMemberResponse> GetBankMember();

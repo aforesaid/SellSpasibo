@@ -15,5 +15,9 @@ namespace SellSpasibo.Domain.Repository
         Task SetUserInfoInactive(string number);
         Task<UserInfoEntity> GetUserInfoByPhoneNumber(string number);
         Task AddOrUpdateUserInfo(UserInfoEntity userInfo);
+
+        IQueryable<TinkoffAccountEntity> GetTinkoffAccounts();
+        Task<TinkoffAccountEntity> GetTinkoffAccount(string number);
+        Task AddOrUpdateTinkoffAccount(TinkoffAccountEntity account);
     }
 }

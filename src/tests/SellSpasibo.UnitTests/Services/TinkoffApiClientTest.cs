@@ -23,8 +23,12 @@ namespace SellSpasibo.UnitTests.Services
                 SessionId = "",
                 WuId = ""
             });
+            
             var moqLogging = new Mock<ILogger<TinkoffApiClient>>();
-            _tinkoffService = new TinkoffApiClient(moqLogging.Object, options);
+            
+            _tinkoffService = new TinkoffApiClient(moqLogging.Object);
+            
+            _tinkoffService.SetTokens(options.Value.SessionId, options.Value.WuId, options.Value.Account);
         }
         [Fact]
         public async Task UpdateSession_Expected_True()

@@ -13,7 +13,6 @@ namespace SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.GetBalance
 
     public class TAPIGetBalancePayloadInfo
     {
-        //TODO: пересмотреть
         [JsonPropertyName("0")]
         public TAPIGetBalancePayload Payload { get; set; }
     }
