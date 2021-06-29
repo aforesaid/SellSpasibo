@@ -15,6 +15,7 @@ namespace SellSpasibo.Infrastructure
         public DbSet<UserInfoEntity> UserInfos { get; protected set; }
         public DbSet<TransactionEntity> Transactions { get; protected set; }
         public DbSet<BankEntity> Banks { get; protected set; }
+        public DbSet<TinkoffAccountEntity> TinkoffAccounts { get; protected set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserInfoEntity>()
@@ -33,7 +34,13 @@ namespace SellSpasibo.Infrastructure
             modelBuilder.Entity<BankEntity>()
                 .HasIndex(x => x.MemberId)
                 .IsUnique();
-            
+
+            modelBuilder.Entity<TinkoffAccountEntity>()
+                .HasKey(x => x.Id).HasName("IX_TINKOFF_ACCOUNT");
+            modelBuilder.Entity<TinkoffAccountEntity>()
+                .HasIndex(x => x.Phone)
+                .IsUnique();
+
             base.OnModelCreating(modelBuilder);
         }
 
@@ -135,19 +142,47 @@ namespace SellSpasibo.Infrastructure
             }
         }
 
+        public IQueryable<TinkoffAccountEntity> GetTinkoffAccounts()
+        {
+            return TinkoffAccounts.Where(x => !x.IsDeleted);
+        }
+
+        public async Task<TinkoffAccountEntity> GetTinkoffAccount(string number)
+        {
+            return await TinkoffAccounts.FirstOrDefaultAsync(x => x.Phone == number);
+        }
+
+        public async Task AddOrUpdateTinkoffAccount(TinkoffAccountEntity account)
+        {
+            var tinkoffAccounts = TinkoffAccounts.Where(x => !x.IsDeleted);
+
+            var existingAccount = await tinkoffAccounts.FirstOrDefaultAsync(x => x.Phone == account.Phone);
+
+            if (existingAccount != null)
+            {
+                existingAccount.SetPassword(account.Password);
+                existingAccount.SetAccountId(account.AccountId);
+                Update(existingAccount);
+            }
+            else
+            {
+                TinkoffAccounts.Add(account);
+            }
+        }
+
         #region Sealed
         public override int SaveChanges()
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
         #endregion
     }
