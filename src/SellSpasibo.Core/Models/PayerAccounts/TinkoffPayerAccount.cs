@@ -12,5 +12,6 @@
         public string Login { get; }
         public string Password { get; }
         public int AccountId { get; private set; }
+
     }
 }
