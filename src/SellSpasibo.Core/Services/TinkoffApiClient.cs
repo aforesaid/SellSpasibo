@@ -12,6 +12,7 @@ using SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.CreateNewOrder;
 using SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.GetBalance;
 using SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.GetBankMember;
 using SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.GetInfoByUser;
+using SellSpasibo.Core.Options;
 
 namespace SellSpasibo.Core.Services
 {
@@ -26,6 +27,18 @@ namespace SellSpasibo.Core.Services
         public TinkoffApiClient(ILogger<TinkoffApiClient> logger)
         {
             _logger = logger;
+        }
+
+        public async Task<bool> SendSms(string login, string password)
+        {
+            //TODO: реализовать начало авторизации
+            return true;
+        }
+
+        public async Task<TinkoffOptions> Authorize(string login, string password, string code)
+        {
+            //TODO: реализовать авторизацию конечную с смс
+            return new TinkoffOptions();
         }
 
         public void SetTokens(string sessionId, string wuId,

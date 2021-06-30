@@ -14,6 +14,16 @@ namespace SellSpasibo.Core.Services.AuthorizationServices
         private ConcurrentDictionary<string, TinkoffPayerAccount> AccountsInProgress = new();
         private readonly ILogger<TinkoffAuthorizationService> _logger;
         private readonly IAccountObserver _accountObserver;
+        private readonly ITinkoffApiClient _tinkoffApiClient;
+
+        public TinkoffAuthorizationService(ILogger<TinkoffAuthorizationService> logger,
+            IAccountObserver accountObserver,
+            ITinkoffApiClient tinkoffApiClient)
+        {
+            _logger = logger;
+            _accountObserver = accountObserver;
+            _tinkoffApiClient = tinkoffApiClient;
+        }
 
         public async Task StartAuthorizeInAccount(string login, string password, int accountId)
         {
@@ -25,7 +35,13 @@ namespace SellSpasibo.Core.Services.AuthorizationServices
                 return;
             }
 
-            //TODO: отправка смс все дела
+            var response = await _tinkoffApiClient.SendSms(login, password);
+            if (!response)
+            {
+                _logger.LogError("Не удалось отправить смс, отклоняю добавление");
+                return;
+            }
+            
             var account = new TinkoffPayerAccount(login, password, accountId);
             var result = AccountsInProgress.TryAdd(account.Login, account);
             if (!result)
@@ -42,9 +58,8 @@ namespace SellSpasibo.Core.Services.AuthorizationServices
                 _logger.LogError("Аккаунта с логином {0} не было в списке предподготовленных на авторизацию");
                 return;
             }
-
-            //TODO: отправка кода и получение данных авторизации по аккаунту
-            TinkoffOptions options = null;
+            
+            var options = await _tinkoffApiClient.Authorize(account.Login, account.Password, code);
 
             var accountObserver = new TinkoffObserverAccount(options.WuId, options.SessionId,
                 account.AccountId.ToString(), account.Login);
