@@ -5,13 +5,12 @@ using SellSpasibo.Core.Interfaces;
 using SellSpasibo.Core.Interfaces.AuthorizationService;
 using SellSpasibo.Core.Models.ObserverAccounts;
 using SellSpasibo.Core.Models.PayerAccounts;
-using SellSpasibo.Core.Options;
 
 namespace SellSpasibo.Core.Services.AuthorizationServices
 {
     public class TinkoffAuthorizationService : ITinkoffAuthorizationService
     {
-        private ConcurrentDictionary<string, TinkoffPayerAccount> AccountsInProgress = new();
+        private readonly ConcurrentDictionary<string, TinkoffPayerAccount> _accountsInProgress = new();
         private readonly ILogger<TinkoffAuthorizationService> _logger;
         private readonly IAccountObserver _accountObserver;
         private readonly ITinkoffApiClient _tinkoffApiClient;
@@ -27,7 +26,7 @@ namespace SellSpasibo.Core.Services.AuthorizationServices
 
         public async Task StartAuthorizeInAccount(string login, string password, int accountId)
         {
-            if (AccountsInProgress.ContainsKey(login))
+            if (_accountsInProgress.ContainsKey(login))
             {
                 _logger.LogWarning(
                     "Не удалось создать запрос по авторизации нового аккаунта так как он уже существует с login : {0}",
@@ -43,7 +42,7 @@ namespace SellSpasibo.Core.Services.AuthorizationServices
             }
             
             var account = new TinkoffPayerAccount(login, password, accountId);
-            var result = AccountsInProgress.TryAdd(account.Login, account);
+            var result = _accountsInProgress.TryAdd(account.Login, account);
             if (!result)
             {
                 _logger.LogError("Не удалось начать авторизацию по аккаунту с логином {0}", account.Login);
@@ -52,7 +51,7 @@ namespace SellSpasibo.Core.Services.AuthorizationServices
 
         public async Task ContinueAuthorize(string login, string code)
         {
-            var result = AccountsInProgress.TryGetValue(login, out var account);
+            var result = _accountsInProgress.TryGetValue(login, out var account);
             if (!result)
             {
                 _logger.LogError("Аккаунта с логином {0} не было в списке предподготовленных на авторизацию");

@@ -6,13 +6,12 @@ using Microsoft.Extensions.Logging;
 using SellSpasibo.Core.Interfaces;
 using SellSpasibo.Core.Models;
 using SellSpasibo.Core.Models.ObserverAccounts;
-using SellSpasibo.Domain.Repository;
 
 namespace SellSpasibo.Core.Services
 {
     public class AccountObserver : IAccountObserver
     {
-        private ConcurrentDictionary<string, TinkoffObserverAccount> ActiveTinkoffObserverAccounts { get; } = new();
+        private readonly ConcurrentDictionary<string, TinkoffObserverAccount> _activeTinkoffObserverAccounts = new();
 
         private readonly ITinkoffApiClient _tinkoffApiClient;
             
@@ -29,7 +28,7 @@ namespace SellSpasibo.Core.Services
         /// </summary>
         public async Task UpdateAccountsInfo()
         {
-            var accounts = ActiveTinkoffObserverAccounts.Select(x => x.Value);
+            var accounts = _activeTinkoffObserverAccounts.Select(x => x.Value);
             foreach (var account in accounts.Where(x => x.IsWorking))
             {
                 _tinkoffApiClient.SetTokens(account.SessionId, account.Wuid, account.AccountId);
@@ -57,7 +56,7 @@ namespace SellSpasibo.Core.Services
         /// <returns></returns>
         public OrderAccounts SelectAccountsForTransaction(double transactionMoney)
         {
-            var accounts = ActiveTinkoffObserverAccounts
+            var accounts = _activeTinkoffObserverAccounts
                 .Select(x => x.Value)
                 .OrderBy(x => x.Money);
             
@@ -107,7 +106,7 @@ namespace SellSpasibo.Core.Services
         {
             foreach (var account in orderAccounts.Accounts)
             {
-                var activeAccount = ActiveTinkoffObserverAccounts
+                var activeAccount = _activeTinkoffObserverAccounts
                     .FirstOrDefault(x => x.Key == account.Account.Number).Value;
                 
                 if (activeAccount == null)
@@ -143,14 +142,14 @@ namespace SellSpasibo.Core.Services
                 return false;
             }
             
-            if (ActiveTinkoffObserverAccounts.ContainsKey(account.Number))
+            if (_activeTinkoffObserverAccounts.ContainsKey(account.Number))
             {
                 _logger.LogError("Платёжный аккаунт с номером {0} уже добавлён, пропускаю запрос",
                     account.Number);
                 return false;
             }
 
-            var result = ActiveTinkoffObserverAccounts.TryAdd(account.Number, account);
+            var result = _activeTinkoffObserverAccounts.TryAdd(account.Number, account);
             
             if (result)
             {
