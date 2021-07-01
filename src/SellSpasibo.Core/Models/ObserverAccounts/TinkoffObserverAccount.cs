@@ -5,17 +5,15 @@
         private object LockObject { get; }
         
         public string Number { get; }
-        public string Wuid { get; }
         public string SessionId { get; }
         public string AccountId { get; }
         public double Money { get; private set; }
 
         public double LockedMoney { get; private set; }
 
-        public TinkoffObserverAccount(string wuid, string sessionId, string accountId,
+        public TinkoffObserverAccount(string sessionId, string accountId,
             string number)
         {
-            Wuid = wuid;
             SessionId = sessionId;
             AccountId = accountId;
             Number = number;

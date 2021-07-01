@@ -8,19 +8,18 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SellSpasibo.Core.Interfaces;
+using SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.Authorize;
 using SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.CreateNewOrder;
 using SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.GetBalance;
 using SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.GetBankMember;
 using SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.GetInfoByUser;
+using SellSpasibo.Core.Models.Authorization.Tinkoff;
 using SellSpasibo.Core.Options;
 
 namespace SellSpasibo.Core.Services
 {
     public class TinkoffApiClient : ITinkoffApiClient
     {
-        private  string _sessionId;
-        private  string _wuId;
-        private  string _account;
         private readonly HttpClient _httpClient = new();
         private readonly ILogger<TinkoffApiClient> _logger;
 
@@ -29,64 +28,89 @@ namespace SellSpasibo.Core.Services
             _logger = logger;
         }
 
-        public async Task<bool> SendSms(string login, string password)
+        public async Task<TinkoffNewSessionInfo> SendSms(string login)
         {
-            //TODO: реализовать начало авторизации
-            return true;
+            var linkCreateSession = UrlsConstants.TinkoffConst.CreateSessionLink;
+            var createSession = await GetAsync<TAPICreateSession>(linkCreateSession);
+
+            var sessionId = createSession.SessionId;
+            var authorizeLink = UrlsConstants.TinkoffConst.AuthorizeLink(sessionId);
+            var request = new Dictionary<string, string>
+            {
+                ["phone"]= login
+            };
+            var response = await PostAsync<TAPINewSessionSMSInfo>(authorizeLink, request);
+
+            const string successResultCode = "WAITING_CONFIRMATION";
+            if (response.ResultCode == successResultCode)
+            {
+                return new TinkoffNewSessionInfo(sessionId, response.OperationTicket);
+            }
+            return null;
         }
 
-        public async Task<TinkoffOptions> Authorize(string login, string password, string code)
+        public async Task<bool> Authorize(string sessionId, string password, string operationTicket,
+            string code)
         {
-            //TODO: реализовать авторизацию конечную с смс
-            return new TinkoffOptions();
-        }
+            var authorizeLink = UrlsConstants.TinkoffConst.AuthorizeLink(sessionId);
+            var request = new Dictionary<string, string>
+            {
+                ["initialOperation"] = "sign_up",
+                ["initialOperationTicket"]= operationTicket,
+                ["configrmationData"]=$@"{{""SMSBYID"":""{code}"""
+            };
+            var response = await PostAsync<TAPISendSMSResponse>(authorizeLink, request);
+            const string successResultCode = "OK";
+            
+            if (response.ResultCode != successResultCode)
+                return false;
 
-        public void SetTokens(string sessionId, string wuId,
-            string account)
-        {
-            _sessionId = sessionId;
-            _wuId      = wuId;
-            _account   = account;
+            request = new Dictionary<string, string>
+            {
+                ["password"] = password
+            };
+            response = await PostAsync<TAPISendSMSResponse>(authorizeLink, request);
+
+            return response.ResultCode == successResultCode;
         }
-        public async Task<bool> UpdateSession()
+        
+        public async Task<bool> UpdateSession(string sessionId)
         {
             using var client   = new HttpClient();
-            var link = UrlsConstants.TinkoffConst.UpdateSessionLink(_sessionId, _wuId);
+            var link = UrlsConstants.TinkoffConst.UpdateSessionLink(sessionId);
             var       response = await client.GetAsync(link);
             return response.StatusCode == HttpStatusCode.OK;
         }
-        public async Task<TAPIGetInfoByUserPayload> GetInfoByUser(string number)
+        public async Task<TAPIGetInfoByUserPayload> GetInfoByUser(string sessionId, string number)
         {
-            var linkInternal = UrlsConstants.TinkoffConst.GetInfoByUserInternalLink(number, _sessionId, _wuId);
+            var linkInternal = UrlsConstants.TinkoffConst.GetInfoByUserInternalLink(number, sessionId);
 
             var responseInternal = await GetAsync<TAPIGetInfoByUserResponse>(linkInternal);
             
             return responseInternal.Payload?.FirstOrDefault();
         }
-        public async Task<TAPIGetBankMemberResponse> GetBankMember()
+        public async Task<TAPIGetBankMemberResponse> GetBankMember(string sessionId)
         {
-            var link = UrlsConstants.TinkoffConst.GetBankMemberLink(_sessionId, _wuId);
+            var link = UrlsConstants.TinkoffConst.GetBankMemberLink(sessionId);
             var       response = await GetAsync<TAPIGetBankMemberResponse>(link);
             return response;
         }
 
-        public async Task<TAPICreateNewOrderResponse> CreateNewOrder(TAPICreateNewOrderRequest order)
+        public async Task<TAPICreateNewOrderResponse> CreateNewOrder(string
+             sessionId, TAPICreateNewOrderRequest order)
         {
-            //TODO: исправить сериализацию ответа, не сериализуется
-            order.Account = _account;
-            
-            var link = UrlsConstants.TinkoffConst.CreateNewOrderLink(_sessionId, _wuId);
+            var link = UrlsConstants.TinkoffConst.CreateNewOrderLink(sessionId);
             const string columnName = "payParameters";
             
             var response = await PostAsync<TAPICreateNewOrderRequest,TAPICreateNewOrderResponse>(link, columnName, order);
             return response;
         }
 
-        public async Task<TAPIGetBalanceResponse> GetBalance()
+        public async Task<TAPIGetBalanceResponse> GetBalance(string sessionId)
         {
-            var link = UrlsConstants.TinkoffConst.GetBalanceLink(_sessionId);
+            var link = UrlsConstants.TinkoffConst.GetBalanceLink(sessionId);
             const string columnName = "requestsData";
-            var request = new TAPIGetBalanceRequestItem(_wuId);
+            var request = new TAPIGetBalanceRequestItem();
             var response = await PostAsync<TAPIGetBalanceRequestItem[], TAPIGetBalanceResponse>(link, columnName, request.ToRequest());
             return response;
         }
@@ -116,6 +140,25 @@ namespace SellSpasibo.Core.Services
             {
                 _logger.LogError(e,"Не удалось выполнить post-запрос к url :{0},columnName : {1} request : {@2}",
                     url, columnName, request);
+                throw;
+            }
+        }
+        private async Task<TResponse> PostAsync<TResponse>(string url,
+            Dictionary<string,string> request)
+        {
+            try
+            {
+                var content = new FormUrlEncodedContent(request);
+
+                var response = await _httpClient.PostAsync(url, content);
+                var responseString = await response.Content.ReadAsStringAsync();
+                var result = JsonSerializer.Deserialize<TResponse>(responseString);
+                return result;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e,"Не удалось выполнить post-запрос к url :{0}, request : {@1}",
+                    url, request);
                 throw;
             }
         }

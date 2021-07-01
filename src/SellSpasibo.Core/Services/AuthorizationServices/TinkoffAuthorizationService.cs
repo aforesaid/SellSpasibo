@@ -34,14 +34,14 @@ namespace SellSpasibo.Core.Services.AuthorizationServices
                 return;
             }
 
-            var response = await _tinkoffApiClient.SendSms(login, password);
-            if (!response)
+            var response = await _tinkoffApiClient.SendSms(login);
+            if (response == null)
             {
                 _logger.LogError("Не удалось отправить смс, отклоняю добавление");
                 return;
             }
             
-            var account = new TinkoffPayerAccount(login, password, accountId);
+            var account = new TinkoffPayerAccount(login, password, accountId, response.SessionId, response.OperationTicket);
             var result = _accountsInProgress.TryAdd(account.Login, account);
             if (!result)
             {
@@ -58,11 +58,18 @@ namespace SellSpasibo.Core.Services.AuthorizationServices
                 return;
             }
             
-            var options = await _tinkoffApiClient.Authorize(account.Login, account.Password, code);
+            var isSuccess = await _tinkoffApiClient.Authorize(account.SessionId, account.Password, account.OperationTicket, code);
 
-            var accountObserver = new TinkoffObserverAccount(options.WuId, options.SessionId,
-                account.AccountId.ToString(), account.Login);
-            _accountObserver.AddAccount(accountObserver);
+            if (isSuccess)
+            {
+                var accountObserver = new TinkoffObserverAccount(account.SessionId,
+                    account.AccountId.ToString(), account.Login);
+                _accountObserver.AddAccount(accountObserver);
+            }
+            else
+            {
+                _logger.LogError("Не удалось закончить авторизацию по логину {0}", login);
+            }
         }
     }
 }

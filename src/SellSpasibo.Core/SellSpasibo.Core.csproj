@@ -8,8 +8,4 @@
     <ProjectReference Include="..\SellSpasibo.Infrastructure\SellSpasibo.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\Authorization\Tinkoff" />
-  </ItemGroup>
-
 </Project>

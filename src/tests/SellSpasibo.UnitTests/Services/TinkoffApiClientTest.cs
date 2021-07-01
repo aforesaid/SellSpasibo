@@ -1,12 +1,10 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Moq;
 using SellSpasibo.Core.Interfaces;
 using SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.CreateNewOrder;
 using SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.GetInfoByUser;
-using SellSpasibo.Core.Options;
 using SellSpasibo.Core.Services;
 using Xunit;
 
@@ -15,25 +13,20 @@ namespace SellSpasibo.UnitTests.Services
     public class TinkoffApiClientTest
     {
         private readonly ITinkoffApiClient _tinkoffService;
+        private readonly string _sessionId;
+        private readonly string _account;
         public TinkoffApiClientTest()
         {
-            var options = Options.Create(new TinkoffOptions
-            {
-                Account = "",
-                SessionId = "",
-                WuId = ""
-            });
-            
+            _sessionId = "";
+            _account = "";
             var moqLogging = new Mock<ILogger<TinkoffApiClient>>();
             
             _tinkoffService = new TinkoffApiClient(moqLogging.Object);
-            
-            _tinkoffService.SetTokens(options.Value.SessionId, options.Value.WuId, options.Value.Account);
         }
         [Fact]
         public async Task UpdateSession_Expected_True()
         {
-            var actual = await _tinkoffService.UpdateSession();
+            var actual = await _tinkoffService.UpdateSession(_sessionId);
             Assert.True(actual);
         }
 
@@ -41,14 +34,14 @@ namespace SellSpasibo.UnitTests.Services
         public async Task GetInfoByUser_Expected_UserParams()
         {
             var number = "+";
-            var actual = await _tinkoffService.GetInfoByUser(number);
+            var actual = await _tinkoffService.GetInfoByUser(_sessionId, number);
             Assert.NotNull(actual);
         }
 
         [Fact]
         public async Task GetBankMember_Expected_BankMember()
         {
-            var actual = await _tinkoffService.GetBankMember();
+            var actual = await _tinkoffService.GetBankMember(_sessionId);
             Assert.NotNull(actual);
             Assert.NotEmpty(actual.Payload);
         }
@@ -64,9 +57,10 @@ namespace SellSpasibo.UnitTests.Services
             var order = new TAPICreateNewOrderRequest()
             {
                 Money = 0.01d,
-                Details = paymentDetails
+                Details = paymentDetails,
+                Account = _account
             };     
-            var actual = await _tinkoffService.CreateNewOrder(order);
+            var actual = await _tinkoffService.CreateNewOrder(_sessionId, order);
            
             Assert.NotNull(actual);
             Assert.NotNull(actual.Payload);
@@ -74,7 +68,7 @@ namespace SellSpasibo.UnitTests.Services
         [Fact]
         public async Task GetBalance_Expected_TinkoffBalanceOrder()
         {
-            var actual = await _tinkoffService.GetBalance();
+            var actual = await _tinkoffService.GetBalance(_sessionId);
            
             Assert.NotNull(actual);
             Assert.NotNull(actual.Payload);
@@ -91,7 +85,7 @@ namespace SellSpasibo.UnitTests.Services
             var counter = 0;
             do
             { 
-                info = await _tinkoffService.GetInfoByUser(number);
+                info = await _tinkoffService.GetInfoByUser(_sessionId, number);
                 if (info != null)
                 {
                     counter++;
@@ -106,7 +100,7 @@ namespace SellSpasibo.UnitTests.Services
                         Money = 0.01d,
                         Details = paymentDetails
                     };
-                    var response = await _tinkoffService.CreateNewOrder(order);
+                    var response = await _tinkoffService.CreateNewOrder(_sessionId, order);
                     await Task.Delay(10000);
                 }
 

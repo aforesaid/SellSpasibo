@@ -24,30 +24,37 @@
             private const string DefaultLinkByPing = "ping?appName=payments&appVersion=2.6.3&origin=web%2Cib5%2Cplatform";
             private const string DefaultLinkByGetInfoByUser = "get_requisites?pointerType=phone&pointerSource=internal";
 
-            public static string UpdateSessionLink(string sessionId, string wuId)
+            public const string CreateSessionLink = "https://www.tinkoff.ru/api/common/v1/session";
+
+            public static string AuthorizeLink(string sessionId)
             {
-                return $"{Domain}/{VersionApi}/{DefaultLinkByPing}&sessionid={sessionId}&wuid={wuId}";
+                return
+                    $"{Domain}/{VersionApi}/sign_up?sessionid={sessionId}";
+            }
+            public static string UpdateSessionLink(string sessionId)
+            {
+                return $"{Domain}/{VersionApi}/{DefaultLinkByPing}&sessionid={sessionId}";
             }
 
-            public static string GetInfoByUserInternalLink(string number, string sessionId, string wuId)
+            public static string GetInfoByUserInternalLink(string number, string sessionId)
             {
-                return $"{Domain}/{VersionApi}/{DefaultLinkByGetInfoByUser}&pointer=%2B{number}&sessionid={sessionId}&wuid={wuId}";
+                return $"{Domain}/{VersionApi}/{DefaultLinkByGetInfoByUser}&pointer=%2B{number}&sessionid={sessionId}";
             }
             //Поддерживаются пока только банк тинькофф
-            public static string GetInfoByUserExternalLink(string number, string sessionId, string wuId)
+            public static string GetInfoByUserExternalLink(string number, string sessionId)
             {
-                return $"{Domain}/{VersionApi}/{DefaultLinkByGetInfoByUser}&pointer=%2B{number}&pointerSource=external&pointerType=phone&sessionid={sessionId}&wuid={wuId}";
+                return $"{Domain}/{VersionApi}/{DefaultLinkByGetInfoByUser}&pointer=%2B{number}&pointerSource=external&pointerType=phone&sessionid={sessionId}";
             }
 
 
-            public static string GetBankMemberLink(string sessionId, string wuId)
+            public static string GetBankMemberLink(string sessionId)
             {
-                return $"{Domain}/{VersionApi}/sbp_dictionary?sessionid={sessionId}&wuid={wuId}";
+                return $"{Domain}/{VersionApi}/sbp_dictionary?sessionid={sessionId}";
             }
 
-            public static string CreateNewOrderLink(string sessionId, string wuId)
+            public static string CreateNewOrderLink(string sessionId)
             {
-                return $"{Domain}/{VersionApi}/pay?appName=payments&sessionid={sessionId}&wuid={wuId}";
+                return $"{Domain}/{VersionApi}/pay?appName=payments&sessionid={sessionId}";
             }
 
             public static string GetBalanceLink(string sessionId)

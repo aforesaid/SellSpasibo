@@ -2,9 +2,9 @@
 {
     public class TAPIGetBalanceRequestItem
     {
-        public TAPIGetBalanceRequestItem(string wuid)
+        public TAPIGetBalanceRequestItem()
         {
-            Params = new TAPIGetBalanceParamsJson(wuid);
+            Params = new TAPIGetBalanceParamsJson();
         }
         public int Key { get; } = 0;
         public string Operation { get; } = "accounts_flat";
@@ -18,9 +18,8 @@
 
     public class TAPIGetBalanceParamsJson
     {
-        public TAPIGetBalanceParamsJson(string wuid)
+        public TAPIGetBalanceParamsJson()
         {
-            Wuid = wuid;
         }
         public string Wuid { get; }
     }

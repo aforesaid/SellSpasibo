@@ -31,14 +31,13 @@ namespace SellSpasibo.Core.Services
             var accounts = _activeTinkoffObserverAccounts.Select(x => x.Value);
             foreach (var account in accounts.Where(x => x.IsWorking))
             {
-                _tinkoffApiClient.SetTokens(account.SessionId, account.Wuid, account.AccountId);
-                var result = await _tinkoffApiClient.UpdateSession();
+                var result = await _tinkoffApiClient.UpdateSession(account.SessionId);
                 if (!result)
                 {
                     account.SetInactive();
                     _logger.LogError("Один из аккаунтов больше не работает, не удалось обновить сессию {0}", account);
                 }
-                var balance = await _tinkoffApiClient.GetBalance();
+                var balance = await _tinkoffApiClient.GetBalance(account.SessionId);
                 var currentBalance = balance.Payload?.Payload?.Cards?.FirstOrDefault(x => x.Id == account.AccountId);
                 if (currentBalance == null)
                 {
