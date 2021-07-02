@@ -1,12 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿
+using System;
+using System.Threading.Tasks;
 
 namespace SellSpasibo.Core.Interfaces
 {
     public interface IPayerAccountManager
     {
-        #region TinkoffManager
-        
+        Task TrySendAllNotPayingTransaction();
+        Task AddNotPayingTransaction(string number, double amount, Guid transactionId);
 
-        #endregion
     }
 }

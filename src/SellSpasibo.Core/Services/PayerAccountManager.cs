@@ -15,8 +15,6 @@ namespace SellSpasibo.Core.Services
 {
     public class PayerAccountManager : IPayerAccountManager
     {
-        private ConcurrentQueue<PayInfo> _payInfos = new();
-        
         private readonly ILogger<PayerAccountManager> _logger;
         private readonly IAccountObserver _accountObserver;
         private readonly ISellSpasiboRepo _sellSpasiboRepo;
@@ -33,22 +31,45 @@ namespace SellSpasibo.Core.Services
             _tinkoffApiClient = tinkoffApiClient;
         }
 
-        public async Task<bool> SendMoney(string number, double amount)
+        public async Task TrySendAllNotPayingTransaction()
+        {
+            var notPayingTransactions = _sellSpasiboRepo.GetPayInfosNotPayed()
+                .ToArray();
+            foreach (var transaction  in notPayingTransactions)
+            {
+                var result = await SendMoney(transaction.Number, transaction.Amount, transaction.TransactionEntityId);
+                
+                if (!result.HasValue)
+                {
+                    _logger.LogError("Не удалось отправить транзакцию в принципе! {@0}", transaction);
+                    continue;
+                }
+                
+                transaction.SetStatus(true, result.Value);
+
+                await _sellSpasiboRepo.AddOrUpdatePayInfo(transaction);
+            }
+        }
+
+        public async Task AddNotPayingTransaction(string number, double amount, Guid transactionId)
+        {
+            await _sellSpasiboRepo.AddOrUpdatePayInfo(new PayInfoEntity(number, amount, transactionId));
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+
+        private async Task<double?> SendMoney(string number, double amount, Guid transactionId)
         {
             //На данном этапе подразумевается, что данные уже есть в БД
             var userInfo = await _sellSpasiboRepo.GetUserInfoByPhoneNumber(number);
             if (userInfo == null)
             {
-                _logger.LogError("Данные по аккаунту не были найдены в БД, отклоняю операцию");
-                return false;
+                _logger.LogError("Данные по аккаунту {0} не были найдены в БД, отклоняю операцию на сумму {1}",
+                    number, amount);
+                return null;
             }
             
             var accounts = _accountObserver.SelectAccountsForTransaction(amount);
-            if (accounts.Money < amount)
-            {
-                _payInfos.Enqueue(new PayInfo(number, amount - accounts.Money));
-                return true;
-            }
 
             foreach (var accountTransaction in accounts.Accounts)
             {
@@ -58,7 +79,8 @@ namespace SellSpasibo.Core.Services
                     accountTransaction.SetTransactionStatus(TransactionStatusEnum.MoneySent);
                     _logger.LogInformation("Был совершён перевод на номер телефона {0} сумма {1}", 
                         accountTransaction.Account.Number, accountTransaction.Money);
-                    //TODO: сохранение перевода в истории
+                    await _sellSpasiboRepo.AddTransactionHistory(new TransactionHistoryEntity(accountTransaction.Account.Number, number,
+                        response.Amount, response.Commission, transactionId));
                 }
                 else
                 {
@@ -70,16 +92,18 @@ namespace SellSpasibo.Core.Services
 
             var notSentMoney = accounts.Accounts
                 .Where(x => x.Status == TransactionStatusEnum.MoneyNotSent)
-                .Sum(x => x.Money);
+                .Sum(x => x.Money) + amount - accounts.Money;
             
             if (notSentMoney != 0)
             {
-                _payInfos.Enqueue(new PayInfo(number, notSentMoney));
+                await _sellSpasiboRepo.AddOrUpdatePayInfo(new PayInfoEntity(number, notSentMoney, transactionId));
                 _logger.LogWarning("Не удалось отправить {0} рублей, повторяю запрос", notSentMoney);
             }
 
             _accountObserver.UnlockOrRemoveMoneyFromAccounts(accounts);
-            return true;
+            await _unitOfWork.SaveChangesAsync();
+            
+            return notSentMoney;
         }
 
         private async Task<OrderResponse> SendMoney(TinkoffObserverAccount accountInfo, UserInfoEntity userInfo, double amount)
