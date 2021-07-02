@@ -1,13 +1,12 @@
-﻿
-using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using SellSpasibo.Domain.Entities;
 
 namespace SellSpasibo.Core.Interfaces
 {
     public interface IPayerAccountManager
     {
-        Task TrySendAllNotPayingTransaction();
-        Task AddNotPayingTransaction(string number, double amount, Guid transactionId);
-
+        Task AddTinkoffAccount(string phone, string password, string accountId);
+        Task<TinkoffAccountEntity[]> GetAccounts();
+        Task<TinkoffAccountEntity> GetAccountByPhone(string phone);
     }
 }
