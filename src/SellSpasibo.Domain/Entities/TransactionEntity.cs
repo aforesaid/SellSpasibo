@@ -11,15 +11,13 @@ namespace SellSpasibo.Domain.Entities
 
         private TransactionEntity() { }
         public TransactionEntity(double cost, string transactionType, 
-            string content, DateTime time,
-            string hash, bool isPaid)
+            string content, DateTime time)
         {
             Cost = cost;
             TransactionType = transactionType;
             Content = content;
             Time = time;
-            Hash = hash;
-            IsPaid = isPaid;
+            Hash = (cost +transactionType + content + time).GetHashCode().ToString();
         }
 
         public double Cost { get; protected set; }
@@ -43,7 +41,6 @@ namespace SellSpasibo.Domain.Entities
         {
             Content = transaction.Content;
             Hash = transaction.Hash;
-            IsPaid = transaction.IsPaid;
         }
     }
 }

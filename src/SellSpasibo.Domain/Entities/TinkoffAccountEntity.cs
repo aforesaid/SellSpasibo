@@ -4,30 +4,19 @@ namespace SellSpasibo.Domain.Entities
 {
     public class TinkoffAccountEntity : Entity
     {
-        private const int LoginLength = 100;
         private const int PasswordLength = 255;
-        private const int PhoneLength = 12;
-        
-        private TinkoffAccountEntity(string phone)
-        {
-            Phone = phone;
-        }
+        private const int PhoneLength = 20;
+        private const int AccountIdLength = 20;
+        private TinkoffAccountEntity() { }
 
-        public TinkoffAccountEntity(string login,
-            string password, 
-            int accountId, string phone)
+        public TinkoffAccountEntity(string password, 
+            string accountId, string phone)
         {
-            Login = login;
             Password = password;
             AccountId = accountId;
             Phone = phone;
         }
-
-        /// <summary>
-        /// Зашифрованный логин от аккаунта Tinkoff
-        /// </summary>
-        [StringLength(LoginLength)]
-        public string Login { get; private set; }
+        
         /// <summary>
         /// Зашифрованный пароль от аккаунта Tinkoff
         /// </summary>
@@ -41,9 +30,10 @@ namespace SellSpasibo.Domain.Entities
         /// <summary>
         /// Номер счёта среди всех
         /// </summary>
-        public int AccountId { get; private set; }
+        [StringLength(AccountIdLength)]
+        public string AccountId { get; private set; }
 
-        public void SetAccountId(int accountId)
+        public void SetAccountId(string accountId)
         {
             AccountId = accountId;
             SetUpdated();

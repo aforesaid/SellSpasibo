@@ -110,6 +110,9 @@ namespace SellSpasibo.Infrastructure
             if (existingTransaction != null)
             {
                 existingTransaction.Merge(transaction);
+                
+                if (transaction.IsPaid)
+                    existingTransaction.SetIsPaid(transaction.IsPaid);
                 Update(existingTransaction);
             }
             else
