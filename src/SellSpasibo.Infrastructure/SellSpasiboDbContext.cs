@@ -135,7 +135,7 @@ namespace SellSpasibo.Infrastructure
             var existingPayInfo = await PayInfo.FirstOrDefaultAsync(x => x.Id == payInfo.Id);
             if (existingPayInfo != null)
             {
-                existingPayInfo.SetSuccessStatus(payInfo.Status);
+                existingPayInfo.SetStatus(payInfo.Status, payInfo.SentAmout);
                 Update(existingPayInfo);
             }
             else
