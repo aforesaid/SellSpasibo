@@ -15,6 +15,7 @@ namespace SellSpasibo.Infrastructure
         public DbSet<UserInfoEntity> UserInfos { get; protected set; }
         public DbSet<TransactionEntity> Transactions { get; protected set; }
         public DbSet<TransactionHistoryEntity> TransactionHistories {get; protected set;}
+        public DbSet<PayInfoEntity> PayInfo { get; protected set; }
         public DbSet<BankEntity> Banks { get; protected set; }
         public DbSet<TinkoffAccountEntity> TinkoffAccounts { get; protected set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -35,6 +36,11 @@ namespace SellSpasibo.Infrastructure
             modelBuilder.Entity<TransactionHistoryEntity>()
                 .HasIndex(x => new {x.NumberFrom, x.NumberTo});
 
+            modelBuilder.Entity<PayInfoEntity>()
+                .HasKey(x => x.Id).HasName("IX_PAY_INFO");
+            modelBuilder.Entity<PayInfoEntity>()
+                .HasIndex(x => x.Status);
+            
             modelBuilder.Entity<BankEntity>()
                 .HasKey(x => x.Id).HasName("IX_BANK");
             modelBuilder.Entity<BankEntity>()
@@ -117,6 +123,27 @@ namespace SellSpasibo.Infrastructure
             await TransactionHistories.AddAsync(transactionHistory);
         }
 
+        public IQueryable<PayInfoEntity> GetPayInfosNotPayed()
+        {
+            var existingPayInfos = PayInfo.Where(x => !x.IsDeleted);
+
+            return existingPayInfos.Where(x => !x.Status);
+        }
+
+        public async Task AddOrUpdatePayInfo(PayInfoEntity payInfo)
+        {
+            var existingPayInfo = await PayInfo.FirstOrDefaultAsync(x => x.Id == payInfo.Id);
+            if (existingPayInfo != null)
+            {
+                existingPayInfo.SetSuccessStatus(payInfo.Status);
+                Update(existingPayInfo);
+            }
+            else
+            {
+                await PayInfo.AddAsync(payInfo);
+            }
+        }
+
         public async Task SetUserInfoInactive(string number)
         {
             var userInfos = UserInfos.Where(x => !x.IsDeleted);
@@ -149,7 +176,7 @@ namespace SellSpasibo.Infrastructure
             }
             else
             {
-                UserInfos.Add(userInfo);
+                await UserInfos.AddAsync(userInfo);
             }
         }
 
@@ -177,7 +204,7 @@ namespace SellSpasibo.Infrastructure
             }
             else
             {
-                TinkoffAccounts.Add(account);
+                await TinkoffAccounts.AddAsync(account);
             }
         }
 

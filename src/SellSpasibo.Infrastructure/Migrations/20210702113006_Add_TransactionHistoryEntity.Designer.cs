@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SellSpasibo.Infrastructure;
@@ -9,9 +10,10 @@ using SellSpasibo.Infrastructure;
 namespace SellSpasibo.API.Infrastructure.Migrations
 {
     [DbContext(typeof(SellSpasiboDbContext))]
-    partial class SellSpasiboDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210702113006_Add_TransactionHistoryEntity")]
+    partial class Add_TransactionHistoryEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,39 +51,6 @@ namespace SellSpasibo.API.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Banks");
-                });
-
-            modelBuilder.Entity("SellSpasibo.Domain.Entities.PayInfoEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<double>("Amount")
-                        .HasColumnType("double precision");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Number")
-                        .HasMaxLength(12)
-                        .HasColumnType("character varying(12)");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("Updated")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("Id")
-                        .HasName("IX_PAY_INFO");
-
-                    b.HasIndex("Status");
-
-                    b.ToTable("PayInfo");
                 });
 
             modelBuilder.Entity("SellSpasibo.Domain.Entities.TinkoffAccountEntity", b =>
@@ -187,12 +156,10 @@ namespace SellSpasibo.API.Infrastructure.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("NumberFrom")
-                        .HasMaxLength(12)
-                        .HasColumnType("character varying(12)");
+                        .HasColumnType("text");
 
                     b.Property<string>("NumberTo")
-                        .HasMaxLength(12)
-                        .HasColumnType("character varying(12)");
+                        .HasColumnType("text");
 
                     b.Property<Guid>("TransactionEntityId")
                         .HasColumnType("uuid");

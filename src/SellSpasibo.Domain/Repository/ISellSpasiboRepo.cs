@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using SellSpasibo.Domain.Entities;
 
@@ -14,6 +15,8 @@ namespace SellSpasibo.Domain.Repository
         
         Task AddTransactionHistory(TransactionHistoryEntity transactionHistory);
 
+        IQueryable<PayInfoEntity> GetPayInfosNotPayed();
+        Task AddOrUpdatePayInfo(PayInfoEntity payInfo);
 
         Task SetUserInfoInactive(string number);
         Task<UserInfoEntity> GetUserInfoByPhoneNumber(string number);

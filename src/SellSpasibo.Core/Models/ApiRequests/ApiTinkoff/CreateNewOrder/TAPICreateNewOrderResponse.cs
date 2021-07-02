@@ -8,5 +8,7 @@ namespace SellSpasibo.Core.Models.ApiRequests.ApiTinkoff.CreateNewOrder
         public string PaymentId { get; set; }
         [JsonPropertyName("payload")]
         public TAPICreateNewOrderPayload Payload { get; set; }
+        [JsonPropertyName("resultCode")]
+        public string ResultCode { get; set; }
     }
 }
