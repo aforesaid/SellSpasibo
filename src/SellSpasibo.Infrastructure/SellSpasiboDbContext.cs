@@ -14,6 +14,7 @@ namespace SellSpasibo.Infrastructure
         public SellSpasiboDbContext(DbContextOptions options) : base(options) { }
         public DbSet<UserInfoEntity> UserInfos { get; protected set; }
         public DbSet<TransactionEntity> Transactions { get; protected set; }
+        public DbSet<TransactionHistoryEntity> TransactionHistories {get; protected set;}
         public DbSet<BankEntity> Banks { get; protected set; }
         public DbSet<TinkoffAccountEntity> TinkoffAccounts { get; protected set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -28,6 +29,11 @@ namespace SellSpasibo.Infrastructure
             modelBuilder.Entity<TransactionEntity>()
                 .HasIndex(x => new {x.Time, x.TransactionType})
                 .IsUnique();
+            
+            modelBuilder.Entity<TransactionHistoryEntity>()
+                .HasKey(x => x.Id).HasName("IX_TRANSACTION_HISTORY");
+            modelBuilder.Entity<TransactionHistoryEntity>()
+                .HasIndex(x => new {x.NumberFrom, x.NumberTo});
 
             modelBuilder.Entity<BankEntity>()
                 .HasKey(x => x.Id).HasName("IX_BANK");
@@ -104,6 +110,11 @@ namespace SellSpasibo.Infrastructure
             {
                 Transactions.Add(transaction);
             }
+        }
+
+        public async Task AddTransactionHistory(TransactionHistoryEntity transactionHistory)
+        {
+            await TransactionHistories.AddAsync(transactionHistory);
         }
 
         public async Task SetUserInfoInactive(string number)

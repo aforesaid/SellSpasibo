@@ -135,6 +135,49 @@ namespace SellSpasibo.API.Infrastructure.Migrations
                     b.ToTable("Transactions");
                 });
 
+            modelBuilder.Entity("SellSpasibo.Domain.Entities.TransactionHistoryEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("Commission")
+                        .HasColumnType("double precision");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("NumberFrom")
+                        .HasColumnType("text");
+
+                    b.Property<string>("NumberTo")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("TransactionEntityId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("TransactionTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id")
+                        .HasName("IX_TRANSACTION_HISTORY");
+
+                    b.HasIndex("TransactionEntityId");
+
+                    b.HasIndex("NumberFrom", "NumberTo");
+
+                    b.ToTable("TransactionHistories");
+                });
+
             modelBuilder.Entity("SellSpasibo.Domain.Entities.UserInfoEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -172,6 +215,17 @@ namespace SellSpasibo.API.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("UserInfos");
+                });
+
+            modelBuilder.Entity("SellSpasibo.Domain.Entities.TransactionHistoryEntity", b =>
+                {
+                    b.HasOne("SellSpasibo.Domain.Entities.TransactionEntity", "TransactionEntity")
+                        .WithMany()
+                        .HasForeignKey("TransactionEntityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TransactionEntity");
                 });
 #pragma warning restore 612, 618
         }

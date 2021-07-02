@@ -11,6 +11,9 @@ namespace SellSpasibo.Domain.Repository
 
         IQueryable<TransactionEntity> GetTransactions(bool? isPaid = null);
         Task AddOrUpdateTransaction(TransactionEntity transaction);
+        
+        Task AddTransactionHistory(TransactionHistoryEntity transactionHistory);
+
 
         Task SetUserInfoInactive(string number);
         Task<UserInfoEntity> GetUserInfoByPhoneNumber(string number);

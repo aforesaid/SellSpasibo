@@ -30,8 +30,8 @@ namespace SellSpasibo.Core.Services
 
         public async Task<TinkoffNewSessionInfo> SendSms(string login)
         {
-            var linkCreateSession = UrlsConstants.TinkoffConst.CreateSessionLink;
-            var createSession = await GetAsync<TAPICreateSession>(linkCreateSession);
+            var createSessionLink = UrlsConstants.TinkoffConst.CreateSessionLink;
+            var createSession = await GetAsync<TAPICreateSession>(createSessionLink);
 
             var sessionId = createSession.SessionId;
             var authorizeLink = UrlsConstants.TinkoffConst.AuthorizeLink(sessionId);
